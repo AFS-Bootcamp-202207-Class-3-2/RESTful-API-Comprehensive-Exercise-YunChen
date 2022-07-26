@@ -63,8 +63,8 @@ public class EmployeeRepository implements InitializingBean {
         return false;
     }
 
-    public boolean updateAnEmployee(Employee employee) {
-        Employee employeeFromDb = queryEmployeeById(employee.getId());
+    public boolean updateAnEmployee(String employeeId , Employee employee) {
+        Employee employeeFromDb = queryEmployeeById(employeeId);
         if (employeeFromDb != null) {
             employeeFromDb.setSalary(employee.getSalary());
             return true;

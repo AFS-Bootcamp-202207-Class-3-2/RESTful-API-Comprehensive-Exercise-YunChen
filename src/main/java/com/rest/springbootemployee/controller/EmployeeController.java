@@ -49,9 +49,10 @@ public class EmployeeController {
         return Constant.EMPLOYEE_IS_EXIST;
     }
 
-    @PutMapping
-    public String updateAnEmployee(@RequestBody Employee employee) {
-        return employeeRepository.updateAnEmployee(employee)?
+    @PutMapping("id")
+    public String updateAnEmployee(@PathVariable("id") String employeeId,
+                                   @RequestBody Employee employee) {
+        return employeeRepository.updateAnEmployee(employeeId,employee)?
                 Constant.UPDATE_EMPLOYEE_SUCCESS:
                 Constant.EMPLOYEE_IS_NOT_EXIST;
     }

@@ -83,9 +83,9 @@ public class CompaniesRepository implements InitializingBean {
         return false;
     }
 
-    public boolean updateCompany(Company company) {
-        Company companyFromDb = queryCompanyById(company.getId());
-        if (company != null) {
+    public boolean updateCompany(String companyId,Company company) {
+        Company companyFromDb = queryCompanyById(companyId);
+        if (companyFromDb != null) {
             companyFromDb.setCompanyName(company.getCompanyName());
             return true;
         }

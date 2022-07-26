@@ -42,10 +42,18 @@ public class CompanyController {
                 Constant.COMPANY_IS_EXIST;
     }
 
-    @PutMapping
-    public String updateCompany(@RequestBody Company company) {
-        return companiesRepository.updateCompany(company) ?
+    @PutMapping("/{id}")
+    public String updateCompany(@PathVariable("id") String companyId,
+                                @RequestBody Company company) {
+        return companiesRepository.updateCompany(companyId,company) ?
                 Constant.UPDATE_COMPANY_SUCCESS :
                 Constant.COMPANY_IS_NOT_EXIST;
     }
+
+//    @DeleteMapping
+//    public String updateCompany(@RequestBody Company company) {
+//        return companiesRepository.updateCompany(company) ?
+//                Constant.UPDATE_COMPANY_SUCCESS :
+//                Constant.COMPANY_IS_NOT_EXIST;
+//    }
 }
