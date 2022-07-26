@@ -72,32 +72,32 @@ public class CompaniesRepository implements InitializingBean {
     }
 
     public boolean insertCompany(Company company) {
-        boolean isExist = companies.stream().
-                anyMatch(innerCompany -> company.getCompanyName().equals(innerCompany.getCompanyName()));
-        if (!isExist) {
+        try {
+            queryCompanyById(company.getId());
             company.setId(nextId);
             nextId = String.valueOf(Integer.parseInt(nextId));
-            companies.add(company);
-            return true;
+            return companies.add(company);
+        } catch (CompanyNotFindException exception) {
+            return false;
         }
-        return false;
     }
 
     public boolean updateCompany(String companyId,Company company) {
-        Company companyFromDb = queryCompanyById(companyId);
-        if (companyFromDb != null) {
+        try {
+            Company companyFromDb = queryCompanyById(companyId);
             companyFromDb.setCompanyName(company.getCompanyName());
-            return true;
+            return companies.add(company);
+        } catch (CompanyNotFindException exception) {
+            return false;
         }
-        return false;
     }
 
     public boolean deleteCompanyById(String companyId) {
-        Company companyFormDb = queryCompanyById(companyId);
-        if (companyFormDb != null) {
-            companies.remove(companyFormDb);
-            return true;
+        try {
+            Company companyFromDb = queryCompanyById(companyId);
+            return companies.remove(companyFromDb);
+        } catch (CompanyNotFindException exception) {
+            return false;
         }
-        return false;
     }
 }

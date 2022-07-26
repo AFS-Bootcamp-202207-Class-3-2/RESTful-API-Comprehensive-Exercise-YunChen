@@ -22,7 +22,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public Employee queryEmployById(@PathVariable String id)   {
+    public Employee queryEmployeeById(@PathVariable String id)   {
         return employeeRepository.queryEmployeeById(id);
     }
 
@@ -49,7 +49,7 @@ public class EmployeeController {
         return Constant.EMPLOYEE_IS_EXIST;
     }
 
-    @PutMapping("id")
+    @PutMapping("/{id}")
     public String updateAnEmployee(@PathVariable("id") String employeeId,
                                    @RequestBody Employee employee) {
         return employeeRepository.updateAnEmployee(employeeId,employee)?

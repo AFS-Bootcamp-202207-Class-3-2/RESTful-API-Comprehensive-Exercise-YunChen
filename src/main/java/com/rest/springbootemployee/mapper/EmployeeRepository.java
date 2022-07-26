@@ -49,31 +49,34 @@ public class EmployeeRepository implements InitializingBean {
     }
 
     public boolean insert(Employee employee) {
-        Employee employeeFromDb = queryEmployeeById(employee.getId());
-        if (employeeFromDb == null) {
+        try {
+            queryEmployeeById(employee.getId());
             employee.setId(nextId);
             nextId = String.valueOf(Integer.parseInt(nextId) + 1);
             return employees.add(employee);
+        } catch (EmployeeNotFindException exception) {
+            return false;
         }
-        return false;
     }
 
     public boolean deleteEmployee(String id) {
-        Employee employeeFromDb = queryEmployeeById(id);
-        if (employeeFromDb != null) {
+        try {
+            Employee employeeFromDb = queryEmployeeById(id);
             employees.remove(employeeFromDb);
             return true;
+        } catch (EmployeeNotFindException exception) {
+            return false;
         }
-        return false;
     }
 
     public boolean updateAnEmployee(String employeeId , Employee employee) {
-        Employee employeeFromDb = queryEmployeeById(employeeId);
-        if (employeeFromDb != null) {
+        try {
+            Employee employeeFromDb = queryEmployeeById(employeeId);
             employeeFromDb.setSalary(employee.getSalary());
             return true;
+        }catch (EmployeeNotFindException exception) {
+            return false;
         }
-        return false;
     }
 
     @Override
