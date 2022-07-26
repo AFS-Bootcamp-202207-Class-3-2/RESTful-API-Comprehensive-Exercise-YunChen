@@ -52,4 +52,8 @@ public class EmployRepository {
                 .collect(Collectors.toList());
     }
 
+    public boolean insert(Employee employee) {
+        return employees.add(employee);
+    }
+
 }
