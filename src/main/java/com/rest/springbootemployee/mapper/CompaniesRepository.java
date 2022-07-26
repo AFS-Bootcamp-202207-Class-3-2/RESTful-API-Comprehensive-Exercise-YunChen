@@ -70,4 +70,16 @@ public class CompaniesRepository implements InitializingBean {
                 .limit(pageSize)
                 .collect(Collectors.toList());
     }
+
+    public boolean insertCompany(Company company) {
+        boolean isExist = companies.stream().
+                anyMatch(innerCompany -> company.getCompanyName().equals(innerCompany.getCompanyName()));
+        if (!isExist) {
+            company.setId(nextId);
+            nextId = String.valueOf(Integer.parseInt(nextId));
+            companies.add(company);
+            return true;
+        }
+        return false;
+    }
 }

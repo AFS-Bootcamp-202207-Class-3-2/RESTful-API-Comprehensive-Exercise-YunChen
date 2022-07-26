@@ -3,6 +3,7 @@ package com.rest.springbootemployee.controller;
 import com.rest.springbootemployee.enities.Company;
 import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.mapper.CompaniesRepository;
+import com.rest.springbootemployee.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,4 +35,10 @@ public class CompanyController {
         return companiesRepository.queryCompanyPage(page,pageSize);
     }
 
+    @PostMapping
+    public String insertCompany(@RequestBody Company company) {
+        return companiesRepository.insertCompany(company) ?
+                Constant.ADD_COMPANY_SUCCESS :
+                Constant.COMPANY_IS_EXIST;
+    }
 }
