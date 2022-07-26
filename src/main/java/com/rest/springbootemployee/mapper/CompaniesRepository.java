@@ -37,4 +37,7 @@ public class CompaniesRepository implements InitializingBean {
         nextId = String.valueOf(companies.size() + 1);
     }
 
+    public List<Company> queryAllCompanies() {
+        return companies;
+    }
 }
