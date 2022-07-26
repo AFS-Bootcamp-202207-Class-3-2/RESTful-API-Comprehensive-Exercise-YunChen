@@ -27,4 +27,22 @@ public class EmployRepository {
     }
 
 
+    public List<Employee> queryByGender(String gender) {
+        return employees.stream().
+                filter((employee) -> employee.getGender().equals(gender)).
+                collect(Collectors.toList());
+    }
+
+    public List<Employee> getAllEmployees() {
+        return employees;
+    }
+
+    public Employee queryEmployeeById(String id) throws EmployeeNotFindException {
+        return employees.stream().
+                filter((employee -> employee.getId().equals(id)))
+                .findFirst()
+                .orElseThrow(EmployeeNotFindException::new);
+    }
+
+
 }
