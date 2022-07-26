@@ -2,7 +2,7 @@ package com.rest.springbootemployee.controller;
 
 
 import com.rest.springbootemployee.enities.Employee;
-import com.rest.springbootemployee.mapper.EmployRepository;
+import com.rest.springbootemployee.mapper.EmployeeRepository;
 import com.rest.springbootemployee.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,36 +14,36 @@ import java.util.List;
 @RequestMapping("/employees")
 public class EmployeeController {
     @Autowired
-    private EmployRepository employRepository;
+    private EmployeeRepository employeeRepository;
 
     @GetMapping(params = {"gender"})
     public List<Employee> queryGender(@RequestParam("gender") String gender) {
-        return employRepository.queryByGender(gender);
+        return employeeRepository.queryByGender(gender);
     }
 
     @GetMapping("/{id}")
     public Employee queryEmployById(@PathVariable String id)   {
-        return employRepository.queryEmployeeById(id);
+        return employeeRepository.queryEmployeeById(id);
     }
 
     @GetMapping
     public List<Employee> queryAllEmployees() {
-        return employRepository.getAllEmployees();
+        return employeeRepository.getAllEmployees();
     }
 
     @GetMapping(params = {"page", "pageSize"})
     public List<Employee> findByPage(@RequestParam("page") int page,
                                      @RequestParam("pageSize") int pageSize) {
-        return employRepository.findByPage(page, pageSize);
+        return employeeRepository.findByPage(page, pageSize);
     }
 
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public String addAnEmployee(@RequestBody Employee employee) {
-        Employee employeeFromDb = employRepository.queryEmployeeById(employee.getId());
+        Employee employeeFromDb = employeeRepository.queryEmployeeById(employee.getId());
         if (employeeFromDb == null) {
-            employRepository.insert(employee);
+            employeeRepository.insert(employee);
             return Constant.ADD_EMPLOYEE_SUCCESS;
         }
         return Constant.EMPLOYEE_IS_EXIST;
@@ -51,14 +51,14 @@ public class EmployeeController {
 
     @PutMapping
     public String updateAnEmployee(@RequestBody Employee employee) {
-        return employRepository.updateAnEmployee(employee)?
+        return employeeRepository.updateAnEmployee(employee)?
                 Constant.UPDATE_EMPLOYEE_SUCCESS:
                 Constant.EMPLOYEE_IS_NOT_EXIST;
     }
 
     @DeleteMapping("/{id}")
     public String deleteAnEmployee(@PathVariable String id) {
-        return employRepository.deleteEmployee(id) ?
+        return employeeRepository.deleteEmployee(id) ?
                 Constant.DELETE_EMPLOYEE_SUCCESS :
                 Constant.EMPLOYEE_IS_NOT_EXIST;
     }

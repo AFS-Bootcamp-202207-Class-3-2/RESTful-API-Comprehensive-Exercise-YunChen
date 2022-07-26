@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController("/companies")
+@RestController
+@RequestMapping("/companies")
 public class CompanyController {
 
     @Autowired
@@ -21,8 +22,13 @@ public class CompanyController {
         return companiesRepository.queryAllCompanies();
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public Company queryCompanyById(@PathVariable String id) {
         return companiesRepository.queryCompanyById(id);
     }
+    @GetMapping("/{id}/employees")
+    public Company queryCompanyAndEmployeesById(@PathVariable String id) {
+        return companiesRepository.queryCompanyById(id);
+    }
+
 }
