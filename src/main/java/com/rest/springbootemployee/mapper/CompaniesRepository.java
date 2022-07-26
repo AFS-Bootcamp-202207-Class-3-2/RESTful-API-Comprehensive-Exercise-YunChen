@@ -59,7 +59,7 @@ public class CompaniesRepository implements InitializingBean {
 
     public List<Employee> queryEmployeesInCompanyById(String companyId) {
         return companies.stream().
-                filter(company -> company.equals(companyId)).
+                filter(company -> company.getId().equals(companyId)).
                 findFirst().orElseThrow(CompanyNotFindException::new).
                 getEmployees();
     }
