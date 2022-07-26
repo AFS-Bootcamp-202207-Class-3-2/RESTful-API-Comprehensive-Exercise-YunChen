@@ -3,6 +3,7 @@ package com.rest.springbootemployee.mapper;
 
 import com.rest.springbootemployee.enities.Company;
 import com.rest.springbootemployee.enities.Employee;
+import com.rest.springbootemployee.exception.CompanyNotFindException;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.InitializingBean;
@@ -39,5 +40,11 @@ public class CompaniesRepository implements InitializingBean {
 
     public List<Company> queryAllCompanies() {
         return companies;
+    }
+
+    public Company queryCompanyById(String id) {
+        return companies.stream().
+                filter(company -> company.equals(id)).
+                findFirst().orElseThrow(CompanyNotFindException::new);
     }
 }
