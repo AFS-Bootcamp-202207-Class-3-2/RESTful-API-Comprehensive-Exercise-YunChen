@@ -49,14 +49,9 @@ public class EmployeeRepository implements InitializingBean {
     }
 
     public boolean insert(Employee employee) {
-        try {
-            queryEmployeeById(employee.getId());
-            employee.setId(nextId);
-            nextId = String.valueOf(Integer.parseInt(nextId) + 1);
-            return employees.add(employee);
-        } catch (EmployeeNotFindException exception) {
-            return false;
-        }
+        employee.setId(nextId);
+        nextId = String.valueOf(Integer.parseInt(nextId) + 1);
+        return employees.add(employee);
     }
 
     public boolean deleteEmployee(String id) {

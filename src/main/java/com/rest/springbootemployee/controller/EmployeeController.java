@@ -41,12 +41,8 @@ public class EmployeeController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public String addAnEmployee(@RequestBody Employee employee) {
-        Employee employeeFromDb = employeeRepository.queryEmployeeById(employee.getId());
-        if (employeeFromDb == null) {
-            employeeRepository.insert(employee);
-            return Constant.ADD_EMPLOYEE_SUCCESS;
-        }
-        return Constant.EMPLOYEE_IS_EXIST;
+        employeeRepository.insert(employee);
+        return Constant.ADD_EMPLOYEE_SUCCESS;
     }
 
     @PutMapping("/{id}")
@@ -59,10 +55,8 @@ public class EmployeeController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public String deleteAnEmployee(@PathVariable String id) {
-        return employeeRepository.deleteEmployee(id) ?
-                Constant.DELETE_EMPLOYEE_SUCCESS :
-                Constant.EMPLOYEE_IS_NOT_EXIST;
+    public void deleteAnEmployee(@PathVariable String id) {
+        employeeRepository.deleteEmployee(id);
     }
 
 }

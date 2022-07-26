@@ -72,14 +72,9 @@ public class CompaniesRepository implements InitializingBean {
     }
 
     public boolean insertCompany(Company company) {
-        try {
-            queryCompanyById(company.getId());
-            company.setId(nextId);
-            nextId = String.valueOf(Integer.parseInt(nextId));
-            return companies.add(company);
-        } catch (CompanyNotFindException exception) {
-            return false;
-        }
+        company.setId(nextId);
+        nextId = String.valueOf(Integer.parseInt(nextId));
+        return companies.add(company);
     }
 
     public boolean updateCompany(String companyId,Company company) {

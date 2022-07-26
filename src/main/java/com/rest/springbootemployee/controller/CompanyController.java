@@ -25,35 +25,34 @@ public class CompanyController {
     public Company queryCompanyById(@PathVariable String id) {
         return companiesRepository.queryCompanyById(id);
     }
+
     @GetMapping("/{id}/employees")
     public List<Employee> queryEmployeesInCompanyById(@PathVariable String id) {
         return companiesRepository.queryEmployeesInCompanyById(id);
     }
-    @GetMapping(params = {"page","pageSize"})
+
+    @GetMapping(params = {"page", "pageSize"})
     public List<Company> queryCompanyPage(@RequestParam("page") int page,
-                                    @RequestParam("pageSize") int pageSize) {
-        return companiesRepository.queryCompanyPage(page,pageSize);
+                                          @RequestParam("pageSize") int pageSize) {
+        return companiesRepository.queryCompanyPage(page, pageSize);
     }
 
     @PostMapping
     public String insertCompany(@RequestBody Company company) {
-        return companiesRepository.insertCompany(company) ?
-                Constant.ADD_COMPANY_SUCCESS :
-                Constant.COMPANY_IS_EXIST;
+        companiesRepository.insertCompany(company);
+        return Constant.ADD_COMPANY_SUCCESS;
     }
 
     @PutMapping("/{id}")
     public String updateCompany(@PathVariable("id") String companyId,
                                 @RequestBody Company company) {
-        return companiesRepository.updateCompany(companyId,company) ?
+        return companiesRepository.updateCompany(companyId, company) ?
                 Constant.UPDATE_COMPANY_SUCCESS :
                 Constant.COMPANY_IS_NOT_EXIST;
     }
 
     @DeleteMapping("/{id}")
-    public String deleteCompanyById(@PathVariable("id") String companyId) {
-        return companiesRepository.deleteCompanyById(companyId) ?
-                Constant.DELETE_COMPANY_SUCCESS :
-                Constant.COMPANY_IS_NOT_EXIST;
+    public void deleteCompanyById(@PathVariable("id") String companyId) {
+        companiesRepository.deleteCompanyById(companyId);
     }
 }
