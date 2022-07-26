@@ -58,6 +58,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public String deleteAnEmployee(@PathVariable String id) {
         return employeeRepository.deleteEmployee(id) ?
                 Constant.DELETE_EMPLOYEE_SUCCESS :

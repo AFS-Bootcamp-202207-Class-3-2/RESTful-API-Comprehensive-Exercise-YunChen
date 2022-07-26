@@ -91,4 +91,13 @@ public class CompaniesRepository implements InitializingBean {
         }
         return false;
     }
+
+    public boolean deleteCompanyById(String companyId) {
+        Company companyFormDb = queryCompanyById(companyId);
+        if (companyFormDb != null) {
+            companies.remove(companyFormDb);
+            return true;
+        }
+        return false;
+    }
 }

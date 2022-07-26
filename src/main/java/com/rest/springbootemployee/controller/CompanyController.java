@@ -50,10 +50,10 @@ public class CompanyController {
                 Constant.COMPANY_IS_NOT_EXIST;
     }
 
-//    @DeleteMapping
-//    public String updateCompany(@RequestBody Company company) {
-//        return companiesRepository.updateCompany(company) ?
-//                Constant.UPDATE_COMPANY_SUCCESS :
-//                Constant.COMPANY_IS_NOT_EXIST;
-//    }
+    @DeleteMapping("/{id}")
+    public String deleteCompanyById(@PathVariable("id") String companyId) {
+        return companiesRepository.deleteCompanyById(companyId) ?
+                Constant.DELETE_COMPANY_SUCCESS :
+                Constant.COMPANY_IS_NOT_EXIST;
+    }
 }
