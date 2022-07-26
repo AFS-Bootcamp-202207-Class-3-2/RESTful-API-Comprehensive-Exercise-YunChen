@@ -20,6 +20,10 @@ plugins {
 
 // comment this block and uncomment the block above to switch to maven.aliyun.com
 repositories {
+    mavenLocal()
+    maven {
+            url 'https://maven.aliyun.com/repository/public/'
+        }
     mavenCentral()
 }
 
@@ -27,10 +31,28 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 //    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 //    runtimeOnly 'mysql:mysql-connector-java:8.0.29'
+    implementation 'io.springfox:springfox-swagger2:2.9.2'
+    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation("cn.hutool:hutool-all:5.8.4")
+    compileOnly 'org.projectlombok:lombok:1.18.4'
+    annotationProcessor 'org.projectlombok:lombok:1.18.4'
+    testCompileOnly 'org.projectlombok:lombok:1.18.4'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.4'
+    implementation 'commons-lang:commons-lang:2.6'
+    testImplementation 'org.assertj:assertj-core:3.18.1'
 //    testImplementation 'com.h2database:h2:2.1.212'
 }
-
+sourceSets{
+    main {
+        java {
+            srcDirs = ['src/main/java',"src/main/java/org/afc/mappers/xml"]
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
 group = 'com.thoughtworks'
 version = '0.0.1-SNAPSHOT'
 description = 'spring-boot-employee'
@@ -39,3 +61,6 @@ sourceCompatibility = '1.8'
 test {
     useJUnitPlatform()
 }
+tasks.withType(GroovyCompile) {   groovyOptions.encoding = "MacRoman"}
+tasks.withType(JavaCompile) {   options.encoding = 'UTF-8'}
+tasks.withType(Javadoc) {   options.encoding = 'UTF-8'}
