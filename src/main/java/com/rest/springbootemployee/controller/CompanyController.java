@@ -41,4 +41,11 @@ public class CompanyController {
                 Constant.ADD_COMPANY_SUCCESS :
                 Constant.COMPANY_IS_EXIST;
     }
+
+    @PutMapping
+    public String updateCompany(@RequestBody Company company) {
+        return companiesRepository.updateCompany(company) ?
+                Constant.UPDATE_COMPANY_SUCCESS :
+                Constant.COMPANY_IS_NOT_EXIST;
+    }
 }
