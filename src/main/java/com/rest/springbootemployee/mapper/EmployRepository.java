@@ -56,4 +56,21 @@ public class EmployRepository {
         return employees.add(employee);
     }
 
+    public boolean deleteEmployee(String id) {
+        Employee employeeFromDb = queryEmployeeById(id);
+        if (employeeFromDb != null) {
+            employees.remove(employeeFromDb);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateAnEmployee(Employee employee) {
+        Employee employeeFromDb = queryEmployeeById(employee.getId());
+        if (employeeFromDb != null) {
+            employeeFromDb.setSalary(employee.getSalary());
+            return true;
+        }
+        return false;
+    }
 }
