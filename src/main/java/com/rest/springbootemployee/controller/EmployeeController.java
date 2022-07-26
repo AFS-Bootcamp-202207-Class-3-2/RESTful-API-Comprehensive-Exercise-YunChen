@@ -31,4 +31,11 @@ public class EmployeeController {
         return repository.getAllEmployees();
     }
 
+    @GetMapping(params = {"page", "pageSize"})
+    public List<Employee> findByPage(@RequestParam("page")int page,@RequestParam("pageSize")int pageSize) {
+        return repository.findByPage(page, pageSize);
+    }
+
+
+
 }

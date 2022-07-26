@@ -45,4 +45,11 @@ public class EmployRepository {
     }
 
 
+    public List<Employee> findByPage(int page, int pageSize) {
+        return employees.stream()
+                .skip((long) (page - 1) * pageSize)
+                .limit(pageSize)
+                .collect(Collectors.toList());
+    }
+
 }
