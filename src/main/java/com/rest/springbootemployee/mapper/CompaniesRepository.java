@@ -73,7 +73,7 @@ public class CompaniesRepository implements InitializingBean {
 
     public boolean insertCompany(Company company) {
         company.setId(nextId);
-        nextId = String.valueOf(Integer.parseInt(nextId));
+        nextId = String.valueOf(Integer.parseInt(nextId + 1));
         return companies.add(company);
     }
 

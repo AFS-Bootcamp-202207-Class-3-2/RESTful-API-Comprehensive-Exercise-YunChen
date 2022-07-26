@@ -52,7 +52,10 @@ public class CompanyController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCompanyById(@PathVariable("id") String companyId) {
-        companiesRepository.deleteCompanyById(companyId);
+    public String deleteCompanyById(@PathVariable("id") String companyId) {
+        boolean isSuccessDelete = companiesRepository.deleteCompanyById(companyId);
+        return isSuccessDelete ?
+                Constant.DELETE_COMPANY_SUCCESS :
+                Constant.COMPANY_IS_NOT_EXIST;
     }
 }
