@@ -51,9 +51,23 @@ public class CompaniesRepository implements InitializingBean {
         return companies;
     }
 
-    public Company queryCompanyById(String id) {
+    public Company queryCompanyById(String companyId) {
         return companies.stream().
-                filter(company -> company.equals(id)).
+                filter(company -> company.equals(companyId)).
                 findFirst().orElseThrow(CompanyNotFindException::new);
+    }
+
+    public List<Employee> queryEmployeesInCompanyById(String companyId) {
+        return companies.stream().
+                filter(company -> company.equals(companyId)).
+                findFirst().orElseThrow(CompanyNotFindException::new).
+                getEmployees();
+    }
+
+    public List<Company> queryCompanyPage(int page, int pageSize) {
+        return companies.stream()
+                .skip((long) page - 1)
+                .limit(pageSize)
+                .collect(Collectors.toList());
     }
 }
