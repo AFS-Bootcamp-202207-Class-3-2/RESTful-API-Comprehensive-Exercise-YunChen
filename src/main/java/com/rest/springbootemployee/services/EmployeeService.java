@@ -39,4 +39,8 @@ public class EmployeeService {
     public List<Employee> findEmployeeByPage(int page, int pageSize) {
         return employeeRepository.findByPage(page, pageSize);
     }
+
+    public Boolean insertEmployee(Employee insertEmployee) {
+        return employeeRepository.insert(insertEmployee);
+    }
 }

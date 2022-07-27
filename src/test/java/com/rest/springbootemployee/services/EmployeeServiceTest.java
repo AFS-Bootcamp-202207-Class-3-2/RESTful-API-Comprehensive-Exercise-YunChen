@@ -104,6 +104,26 @@ public class EmployeeServiceTest {
         assertThat(employeeByPage).contains(thirdEmployee, fourthEmployee);
     }
 
+    @Test
+    void should_add_employee_in_repository_when_insert_employee_given_message_of_employee() {
+        //given
+        Employee firstEmployee = new Employee("1", "Susan", 20, "Female", 8000, "");
+        given(employeeRepository.insert(firstEmployee)).willReturn(true);
+        //when
+        Boolean isInsertEmployee = employeeService.insertEmployee(firstEmployee);
+        //then
+        assertThat(isInsertEmployee).isEqualTo(true);
+    }
 
+
+    @Test
+    void should_count_down_the_employee_when_delete_employee_by_id_given_employee_id() {
+        //given
+
+        //when
+
+        //then
+    }
+    
 
 }
