@@ -101,8 +101,19 @@ public class CompaniesServiceTest {
         Company firstCompany = new Company("1", "ooal", new ArrayList<>());
         given(companiesRepository.insertCompany(firstCompany)).willReturn(true);
         //when
-       Boolean isInsert = companiesService.insertCompany(firstCompany);
+        Boolean isInsert = companiesService.insertCompany(firstCompany);
         //then
         assertThat(true).isEqualTo(isInsert);
+    }
+
+    @Test
+    void should_get_true_when_update_company_given_company_msg()throws Exception {
+        //given
+        Company firstCompany = new Company("1", "oocl", new ArrayList<>());
+        given(companiesRepository.updateCompany("1",firstCompany)).willReturn(true);
+        //when
+        Boolean isUpdate = companiesService.updateCompany("1",firstCompany);
+        //then
+        assertThat(true).isEqualTo(isUpdate);
     }
 }

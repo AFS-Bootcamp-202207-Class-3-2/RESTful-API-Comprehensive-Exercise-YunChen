@@ -33,4 +33,8 @@ public class CompaniesService {
     public Boolean insertCompany(Company company) {
         return companiesRepository.insertCompany(company);
     }
+
+    public Boolean updateCompany(String id,Company company) {
+        return companiesRepository.updateCompany(id, company);
+    }
 }
