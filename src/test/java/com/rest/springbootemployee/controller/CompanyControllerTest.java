@@ -158,4 +158,18 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.employees", hasSize(2)));
     }
 
+
+    @Test
+    void should_increase_number_when_delete_given_company_id()throws Exception {
+        //given
+        Company firstCompany = new Company("1", "oocl", new ArrayList<>());
+        Company secondCompany = new Company("2", "aaal", new ArrayList<>());
+        companiesRepository.insertCompany(firstCompany);
+        companiesRepository.insertCompany(secondCompany);
+        //when
+        client.perform(MockMvcRequestBuilders.delete("/companies/{id}","1"));
+        //then
+        client.perform(MockMvcRequestBuilders.get("/companies"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)));
+    }
 }
