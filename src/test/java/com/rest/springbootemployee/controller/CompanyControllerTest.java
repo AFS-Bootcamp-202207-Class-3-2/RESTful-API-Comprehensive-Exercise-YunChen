@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
 @SpringBootTest
@@ -42,5 +43,20 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)));
         //then
     }
+    
+    @Test
+    void should_return_right_company_when_query_by_id_given_company_id() throws Exception {
+        //given
+        Company firstCompany = new Company("1", "oocl", new ArrayList<>());
+        Company secondCompany = new Company("2", "aaal", new ArrayList<>());
+        companiesRepository.insertCompany(firstCompany);
+        companiesRepository.insertCompany(secondCompany);
+        //when
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}","2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isString())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.companyName",equalTo("aaal")));
+        //then
+    }
+    
 
 }
