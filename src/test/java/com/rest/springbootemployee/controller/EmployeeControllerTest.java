@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -123,7 +125,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    void should_return_employee_when_query_by_id_given_employee_id() {
+    void should_return_employee_when_query_by_id_given_employee_id() throws Exception {
         //given
         employeeRepository.insert(new Employee(
                 "1",
@@ -134,7 +136,33 @@ public class EmployeeControllerTest {
                 "abc"
         ));
         //when
+        client.perform(MockMvcRequestBuilders.get("/employees/{id}","1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isString())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name",equalTo("Sarah")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.age",equalTo(12)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.gender",equalTo("Female")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.salary",equalTo(2000)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.companyName",equalTo("abc")));
+        //then
+    }
 
+
+    @Test
+    void should_return_third_fourth_employee_when_find_by_page_given_page_2_page_size_2() throws Exception {
+        //given
+        Employee firstEmployee = new Employee("1", "Sarah", 12, "Female", 42000, "abc");
+        Employee secondEmployee = new Employee("1", "Mathew", 12, "Female", 22000, "abc");
+        Employee thirdEmployee = new Employee("1", "Hang", 12, "Female", 12000, "abc");
+        Employee fourthEmployee = new Employee("1", "Done", 12, "Female", 2000, "abc");
+        employeeRepository.insert(firstEmployee);
+        employeeRepository.insert(secondEmployee);
+        employeeRepository.insert(thirdEmployee);
+        employeeRepository.insert(fourthEmployee);
+        //when
+        client.perform(MockMvcRequestBuilders.get("/employees")
+                        .param("page", "2")
+                        .param("pageSize", "2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)));
         //then
     }
 
