@@ -1,6 +1,7 @@
 package com.rest.springbootemployee.services;
 
 import com.rest.springbootemployee.enities.Company;
+import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.mapper.CompaniesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,9 @@ public class CompaniesService {
 
     public Company queryCompanyById(String companyId) {
         return companiesRepository.queryCompanyById(companyId);
+    }
+
+    public List<Employee> queryEmployeesInCompanyById(String id) {
+        return companiesRepository.queryEmployeesInCompanyById(id);
     }
 }

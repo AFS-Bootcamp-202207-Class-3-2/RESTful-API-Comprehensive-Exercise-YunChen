@@ -1,6 +1,7 @@
 package com.rest.springbootemployee.services;
 
 import com.rest.springbootemployee.enities.Company;
+import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.mapper.CompaniesRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,5 +60,21 @@ public class CompaniesServiceTest {
         //then
         Company companyFromDb = companiesService.queryCompanyById("2");
         assertThat(companyFromDb).isEqualTo(secondCompany);
+    }
+
+    @Test
+    void should_return_company_employees_data_when_query_company_employees_by_company_id_given_company_id()throws Exception {
+        //given
+        List<Employee> prepareEmployees = new ArrayList<>();
+        Employee firstEmployee = new Employee("1", "Susan", 23, "Female", 9000, "");
+        Employee secondEmployee = new Employee("1", "Mathew", 23, "Female", 12000, "");
+        prepareEmployees.add(firstEmployee);
+        prepareEmployees.add(secondEmployee);
+        Company firstCompany = new Company("1", "oocl",prepareEmployees);
+        given(companiesRepository.queryEmployeesInCompanyById("1")).willReturn(prepareEmployees);
+        //when
+        List<Employee> companyEmployeesFromDb = companiesService.queryEmployeesInCompanyById("1");
+        //then
+        assertThat(companyEmployeesFromDb).isEqualTo(prepareEmployees);
     }
 }
