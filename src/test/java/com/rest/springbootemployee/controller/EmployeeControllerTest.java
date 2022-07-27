@@ -185,6 +185,36 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(3)));
     }
 
+    @Test
+    void should_update_salay_50000_when_update_employee_given_id_and_update_message() throws Exception {
+        //given
+        Employee firstEmployee = new Employee("1", "Sarah", 12, "Female", 42000, "abc");
+        Employee secondEmployee = new Employee("2", "Mathew", 12, "Female", 22000, "abc");
+        Employee thirdEmployee = new Employee("1", "Hang", 12, "Female", 12000, "abc");
+        Employee fourthEmployee = new Employee("1", "Done", 12, "Female", 2000, "abc");
+        employeeRepository.insert(firstEmployee);
+        employeeRepository.insert(secondEmployee);
+        employeeRepository.insert(thirdEmployee);
+        employeeRepository.insert(fourthEmployee);
+        String updateEmployeeMsg = "{\n" +
+                "    \"id\": \"2\",\n" +
+                "    \"name\": \"Mathew\",\n" +
+                "    \"age\": 12,\n" +
+                "    \"gender\": \"Female\",\n" +
+                "    \"salary\": 50000,\n" +
+                "    \"companyName\": \"abc\"\n" +
+                "  }";
+        //when
+        client.perform(MockMvcRequestBuilders.put("/employees/{id}","2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updateEmployeeMsg));
+        //then
+        client.perform(MockMvcRequestBuilders.get("/employees/{id}","2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isString())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.salary",equalTo(50000)));
+    }
+
+
     
 
 }
