@@ -166,6 +166,25 @@ public class EmployeeControllerTest {
         //then
     }
 
+
+    @Test
+    void should_increase_employee_number_when_delete_exist_employee_given_delete_id() throws Exception {
+        //given
+        Employee firstEmployee = new Employee("1", "Sarah", 12, "Female", 42000, "abc");
+        Employee secondEmployee = new Employee("1", "Mathew", 12, "Female", 22000, "abc");
+        Employee thirdEmployee = new Employee("1", "Hang", 12, "Female", 12000, "abc");
+        Employee fourthEmployee = new Employee("1", "Done", 12, "Female", 2000, "abc");
+        employeeRepository.insert(firstEmployee);
+        employeeRepository.insert(secondEmployee);
+        employeeRepository.insert(thirdEmployee);
+        employeeRepository.insert(fourthEmployee);
+        //when
+        client.perform(MockMvcRequestBuilders.delete("/employees/{id}","2"));
+        //then
+        client.perform(MockMvcRequestBuilders.get("/employees"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(3)));
+    }
+
     
 
 }
