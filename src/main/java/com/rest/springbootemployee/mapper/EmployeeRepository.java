@@ -79,7 +79,7 @@ public class EmployeeRepository implements InitializingBean {
         employees.add(new Employee("5", "Lily", 20, "Female", 8000,"oocl"));
         employees.add(new Employee("1", "Mike", 20, "Female", 6000,"spring"));
         employees.add(new Employee("3", "Lucy", 20, "Female", 8000,"oocl"));
-        employees.add(new Employee("4", "czy", 20, "Man", 18000,"spring"));
+        employees.add(new Employee("4", "czy", 20, "male", 18000,"spring"));
         employees.add(new Employee("2", "John", 20, "Female", 4000,"oocl"));
         nextId = String.valueOf(employees.size() + 1);
     }

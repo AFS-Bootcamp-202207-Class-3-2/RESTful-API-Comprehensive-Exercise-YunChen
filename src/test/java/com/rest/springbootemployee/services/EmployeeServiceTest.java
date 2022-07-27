@@ -37,8 +37,6 @@ public class EmployeeServiceTest {
         Employee secondEmployee = new Employee("1", "Mathew", 23, "Female", 12000, "");
         prepareEmployees.add(firstEmployee);
         prepareEmployees.add(secondEmployee);
-//        employeeRepository.insert(firstEmployee);
-//        employeeRepository.insert(secondEmployee);
         given(employeeService.findALl()).willReturn(prepareEmployees);
         //when
         //should
@@ -50,8 +48,9 @@ public class EmployeeServiceTest {
     //given
         Employee employeeToUpdate = new Employee("1", "Susan", 20, "Female", 8000, "");
         Employee employeeInUpdateRequest = new Employee("1", "Mathew", 10, "male", 21000, "");
+        given (employeeRepository.queryEmployeeById("1")).willReturn(employeeToUpdate);
     //when
-        employeeService.update("1", employeeToUpdate);
+        employeeService.update("1", employeeInUpdateRequest);
     //should
         assertEquals("Susan",employeeToUpdate.getName());
         assertEquals(20,employeeToUpdate.getAge());

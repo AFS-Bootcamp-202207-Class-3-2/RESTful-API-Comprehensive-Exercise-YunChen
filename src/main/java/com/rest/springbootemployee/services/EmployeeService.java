@@ -1,6 +1,7 @@
 package com.rest.springbootemployee.services;
 
 import com.rest.springbootemployee.enities.Employee;
+import com.rest.springbootemployee.exception.EmployeeNotFindException;
 import com.rest.springbootemployee.mapper.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,15 @@ public class EmployeeService {
         return employeeRepository.getAllEmployees();
     }
 
-    public Employee update(String id, Employee employeeToUpdate) {
-        return null;
+    public Boolean update(String id, Employee employeeToUpdate) {
+        try {
+            Employee employeeFromDb = employeeRepository.queryEmployeeById(id);
+            if (employeeToUpdate.getSalary() != null) {
+                employeeFromDb.setSalary(employeeToUpdate.getSalary() );
+            }
+            return true;
+        }catch (EmployeeNotFindException exception) {
+            return false;
+        }
     }
 }
