@@ -9,8 +9,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
@@ -82,5 +84,43 @@ public class EmployeeControllerTest {
         assertThat(allEmployees.get(0).getSalary(), equalTo(8000));
     }
 
+    
+    @Test
+    void should_return_all_male_employees_when_perform_get_by_gender_given_employees_and_gender_is_male() throws Exception {
+        //given
+        String femaleEmployee = "{\n" +
+                "    \"id\": \"1\",\n" +
+                "    \"name\": \"Lily\",\n" +
+                "    \"age\": 20,\n" +
+                "    \"gender\": \"Female\",\n" +
+                "    \"salary\": 8000,\n" +
+                "    \"companyName\": \"oocl\"\n" +
+                "  }";
+        String maleEmployee = "{\n" +
+                "    \"id\": \"1\",\n" +
+                "    \"name\": \"John\",\n" +
+                "    \"age\": 20,\n" +
+                "    \"gender\": \"male\",\n" +
+                "    \"salary\": 8000,\n" +
+                "    \"companyName\": \"oocl\"\n" +
+                "  }";
+        client.perform(MockMvcRequestBuilders.post("/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(femaleEmployee));
+        client.perform(MockMvcRequestBuilders.post("/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(maleEmployee));
+        //when
+        client.perform(MockMvcRequestBuilders.get("/employees")
+                .param("gender","male"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isString())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", equalTo("John")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].gender", equalTo("male")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].age", equalTo(20)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].salary", equalTo(8000)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].companyName", equalTo("oocl")));
+        //then
+    }
+    
 
 }
