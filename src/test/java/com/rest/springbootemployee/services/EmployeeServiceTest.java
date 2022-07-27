@@ -119,11 +119,13 @@ public class EmployeeServiceTest {
     @Test
     void should_count_down_the_employee_when_delete_employee_by_id_given_employee_id() {
         //given
-
+        Employee firstEmployee = new Employee("1", "Susan", 20, "Female", 8000, "");
+        given(employeeRepository.deleteEmployee("1")).willReturn(true);
         //when
-
+        Boolean isInsertEmployee = employeeService.removeEmployee(firstEmployee.getId());
         //then
+        assertThat(isInsertEmployee).isEqualTo(true);
     }
-    
+
 
 }

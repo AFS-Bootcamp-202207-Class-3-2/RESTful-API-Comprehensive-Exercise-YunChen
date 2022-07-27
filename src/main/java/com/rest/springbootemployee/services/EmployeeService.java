@@ -43,4 +43,8 @@ public class EmployeeService {
     public Boolean insertEmployee(Employee insertEmployee) {
         return employeeRepository.insert(insertEmployee);
     }
+
+    public Boolean removeEmployee(String removeEmployeeId) {
+        return employeeRepository.deleteEmployee(removeEmployeeId);
+    }
 }
