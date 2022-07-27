@@ -29,4 +29,8 @@ public class CompaniesService {
     public List<Company> queryCompanyPage(int page, int pageSize) {
         return companiesRepository.queryCompanyPage(page, pageSize);
     }
+
+    public Boolean insertCompany(Company company) {
+        return companiesRepository.insertCompany(company);
+    }
 }

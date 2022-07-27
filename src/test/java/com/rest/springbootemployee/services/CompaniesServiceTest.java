@@ -95,4 +95,14 @@ public class CompaniesServiceTest {
         //then
         assertThat(companyEmployeesFromDb).isEqualTo(exceptCompanies);
     }
+    @Test
+    void should_increase_company_when_insert_company_given_company_msg()throws Exception {
+        //given
+        Company firstCompany = new Company("1", "ooal", new ArrayList<>());
+        given(companiesRepository.insertCompany(firstCompany)).willReturn(true);
+        //when
+       Boolean isInsert = companiesService.insertCompany(firstCompany);
+        //then
+        assertThat(true).isEqualTo(isInsert);
+    }
 }
