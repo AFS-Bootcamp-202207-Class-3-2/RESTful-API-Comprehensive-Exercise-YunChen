@@ -119,4 +119,43 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(3)));
     }
 
+    @Test
+    void should_change_name_of_company_when_update_given_update_msg()throws Exception {
+        String jsonCompany = "{\n" +
+                "    \"id\": \"1\",\n" +
+                "    \"companyName\": \"spring\",\n" +
+                "    \"employees\": [\n" +
+                "      {\n" +
+                "        \"id\": \"1\",\n" +
+                "        \"name\": \"Mike\",\n" +
+                "        \"age\": 20,\n" +
+                "        \"gender\": \"Female\",\n" +
+                "        \"salary\": 6000,\n" +
+                "        \"companyName\": \"spring\"\n" +
+                "      },\n" +
+                "      {\n" +
+                "        \"id\": \"4\",\n" +
+                "        \"name\": \"czy\",\n" +
+                "        \"age\": 20,\n" +
+                "        \"gender\": \"male\",\n" +
+                "        \"salary\": 18000,\n" +
+                "        \"companyName\": \"spring\"\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }";
+        //given
+        Company firstCompany = new Company("1", "oocl", new ArrayList<>());
+        Company secondCompany = new Company("2", "aaal", new ArrayList<>());
+        companiesRepository.insertCompany(firstCompany);
+        companiesRepository.insertCompany(secondCompany);
+        //when
+        client.perform(MockMvcRequestBuilders.put("/companies/{id}","1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonCompany));
+        //then
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}","1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.companyName", equalTo("spring")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees", hasSize(2)));
+    }
+
 }

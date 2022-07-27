@@ -83,6 +83,7 @@ public class CompaniesRepository implements InitializingBean {
         try {
             Company companyFromDb = queryCompanyById(companyId);
             companyFromDb.setCompanyName(company.getCompanyName());
+            companyFromDb.setEmployees(company.getEmployees());
             return companies.add(company);
         } catch (CompanyNotFindException exception) {
             return false;
