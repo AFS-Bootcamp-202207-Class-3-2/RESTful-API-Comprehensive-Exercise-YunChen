@@ -28,8 +28,10 @@ public class CompaniesRepository implements InitializingBean {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+
     @Override
     public void afterPropertiesSet() throws Exception {
+
         companies.addAll(
                 Arrays.asList(
                         new Company("1", "spring", new ArrayList<>()),
