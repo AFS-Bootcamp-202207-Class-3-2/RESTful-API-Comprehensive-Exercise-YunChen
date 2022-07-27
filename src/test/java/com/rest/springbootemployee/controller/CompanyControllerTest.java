@@ -3,11 +3,13 @@ package com.rest.springbootemployee.controller;
 import com.alibaba.fastjson.JSON;
 import com.rest.springbootemployee.enities.Company;
 import com.rest.springbootemployee.mapper.CompaniesRepository;
+import com.rest.springbootemployee.utils.Constant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -76,6 +78,45 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)));
         //then
     }
-    
+
+
+    @Test
+    void should_return_insert_success_when_insert_company_given_company()throws Exception {
+
+        String jsonCompany = "{\n" +
+                "    \"id\": \"1\",\n" +
+                "    \"companyName\": \"spring\",\n" +
+                "    \"employees\": [\n" +
+                "      {\n" +
+                "        \"id\": \"1\",\n" +
+                "        \"name\": \"Mike\",\n" +
+                "        \"age\": 20,\n" +
+                "        \"gender\": \"Female\",\n" +
+                "        \"salary\": 6000,\n" +
+                "        \"companyName\": \"spring\"\n" +
+                "      },\n" +
+                "      {\n" +
+                "        \"id\": \"4\",\n" +
+                "        \"name\": \"czy\",\n" +
+                "        \"age\": 20,\n" +
+                "        \"gender\": \"male\",\n" +
+                "        \"salary\": 18000,\n" +
+                "        \"companyName\": \"spring\"\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }";
+        //given
+        Company firstCompany = new Company("1", "oocl", new ArrayList<>());
+        Company secondCompany = new Company("2", "aaal", new ArrayList<>());
+        companiesRepository.insertCompany(firstCompany);
+        companiesRepository.insertCompany(secondCompany);
+        //when
+        client.perform(MockMvcRequestBuilders.post("/companies")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonCompany));
+        //then
+        client.perform(MockMvcRequestBuilders.get("/companies"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(3)));
+    }
 
 }
