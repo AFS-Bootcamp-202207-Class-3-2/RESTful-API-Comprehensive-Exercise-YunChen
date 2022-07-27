@@ -40,9 +40,9 @@ public class EmployeeController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public String addAnEmployee(@RequestBody Employee employee) {
+    public Employee addAnEmployee(@RequestBody Employee employee) {
         employeeRepository.insert(employee);
-        return Constant.ADD_EMPLOYEE_SUCCESS;
+        return employee;
     }
 
     @PutMapping("/{id}")

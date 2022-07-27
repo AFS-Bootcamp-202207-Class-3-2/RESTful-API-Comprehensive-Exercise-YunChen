@@ -7,10 +7,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
 @SpringBootTest
@@ -20,16 +25,18 @@ public class EmployeeControllerTest {
     MockMvc client;
 
     @BeforeEach
-    public void beforePrepare(){
+    public void beforePrepare() {
         employeeRepository.setNextId("1");
         employeeRepository.getEmployees().clear();
     }
+
     @Autowired
     EmployeeRepository employeeRepository;
+
     @Test
     void should_get_all_employees_when_perform_get_given_employees() throws Exception {
         //given
-        employeeRepository.insert(new Employee("6","Salay",22,"Female",10000,""));
+        employeeRepository.insert(new Employee("6", "Salay", 22, "Female", 10000, ""));
         //when
         client.perform(MockMvcRequestBuilders.get("/employees"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -44,13 +51,36 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    void should__when__given_() {
+    void should_create_a_new_empLoyee_when_perform_post_given_a_new_employee() throws Exception {
         //given
-        
+        String newEmployee = "{\n" +
+                "    \"id\": \"1\",\n" +
+                "    \"name\": \"Lily\",\n" +
+                "    \"age\": 20,\n" +
+                "    \"gender\": \"Female\",\n" +
+                "    \"salary\": 8000,\n" +
+                "    \"companyName\": \"oocl\"\n" +
+                "  }";
         //when
-        
+        client.perform(MockMvcRequestBuilders.post("/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(newEmployee))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isString())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Lily"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(20))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("Female"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.companyName").value("oocl"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(8000));
         //then
+        List<Employee> allEmployees = employeeRepository.getAllEmployees();
+        assertThat(allEmployees, hasSize(1));
+        assertThat(allEmployees.get(0).getId(), equalTo("1"));
+        assertThat(allEmployees.get(0).getName(), equalTo("Lily"));
+        assertThat(allEmployees.get(0).getAge(), equalTo(20));
+        assertThat(allEmployees.get(0).getGender(), equalTo("Female"));
+        assertThat(allEmployees.get(0).getCompanyName(), equalTo("oocl"));
+        assertThat(allEmployees.get(0).getSalary(), equalTo(8000));
     }
-    
+
 
 }
