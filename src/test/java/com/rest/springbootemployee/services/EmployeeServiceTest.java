@@ -74,5 +74,16 @@ public class EmployeeServiceTest {
         assertEquals(false, employeesFromDb.contains(firstEmployee));
     }
 
+    @Test
+    void should_find_employee_when_query_by_id_given_employee_id() {
+        //given
+        Employee exceptionEmployee = new Employee("1", "Susan", 20, "Female", 8000, "");
+        //when
+        given (employeeRepository.queryEmployeeById("1")).willReturn(exceptionEmployee);
+        //then
+        Employee employeeFromDb =employeeService.queryEmployeeById("1");
+        assertEquals(employeeFromDb,exceptionEmployee);
+    }
+
 
 }

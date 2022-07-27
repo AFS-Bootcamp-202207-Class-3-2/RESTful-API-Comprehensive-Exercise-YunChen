@@ -31,4 +31,8 @@ public class EmployeeService {
     public List<Employee> queryEmployeeByGender(String male) {
         return employeeRepository.queryByGender(male);
     }
+
+    public Employee queryEmployeeById(String employeeId) {
+        return employeeRepository.queryEmployeeById(employeeId);
+    }
 }
