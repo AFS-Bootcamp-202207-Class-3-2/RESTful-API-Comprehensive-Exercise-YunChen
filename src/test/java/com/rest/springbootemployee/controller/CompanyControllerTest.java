@@ -1,5 +1,6 @@
 package com.rest.springbootemployee.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.rest.springbootemployee.enities.Company;
 import com.rest.springbootemployee.mapper.CompaniesRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +14,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -55,6 +55,25 @@ public class CompanyControllerTest {
         client.perform(MockMvcRequestBuilders.get("/companies/{id}","2"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isString())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.companyName",equalTo("aaal")));
+        //then
+    }
+
+    @Test
+    void should_return_last_twice_companies_when_query_company_by_page_given_page_and_page_size()throws Exception {
+        //given
+        Company firstCompany = new Company("1", "oocl", new ArrayList<>());
+        Company secondCompany = new Company("2", "aaal", new ArrayList<>());
+        Company thirdCompany = new Company("3", "abc", new ArrayList<>());
+        Company fourthCompany = new Company("4", "ddd", new ArrayList<>());
+        companiesRepository.insertCompany(firstCompany);
+        companiesRepository.insertCompany(secondCompany);
+        companiesRepository.insertCompany(thirdCompany);
+        companiesRepository.insertCompany(fourthCompany);
+        //when
+        client.perform(MockMvcRequestBuilders.get("/companies")
+                .param("page", "2")
+                .param("pageSize", "2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)));
         //then
     }
     

@@ -68,7 +68,7 @@ public class CompaniesRepository implements InitializingBean {
 
     public List<Company> queryCompanyPage(int page, int pageSize) {
         return companies.stream()
-                .skip((long) page - 1)
+                .skip((long)( page - 1)*pageSize)
                 .limit(pageSize)
                 .collect(Collectors.toList());
     }
