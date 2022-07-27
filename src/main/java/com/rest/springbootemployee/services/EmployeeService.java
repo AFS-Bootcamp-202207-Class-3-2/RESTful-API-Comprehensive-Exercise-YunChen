@@ -14,4 +14,8 @@ public class EmployeeService {
     public List<Employee> findALl() {
         return employeeRepository.getAllEmployees();
     }
+
+    public Employee update(String id, Employee employeeToUpdate) {
+        return null;
+    }
 }
