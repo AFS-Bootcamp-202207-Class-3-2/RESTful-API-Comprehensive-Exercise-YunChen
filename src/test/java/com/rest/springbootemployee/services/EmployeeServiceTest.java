@@ -57,4 +57,22 @@ public class EmployeeServiceTest {
         assertEquals("Female",employeeToUpdate.getGender());
         assertEquals(21000,employeeToUpdate.getSalary());
     }
+    @Test
+    void should_return_males_when_query_gender_given_param_male() {
+        //given
+        Employee firstEmployee = new Employee("1", "Susan", 20, "Female", 8000, "");
+        Employee secondEmployee = new Employee("1", "Mathew", 10, "male", 21000, "");
+        Employee thirdEmployee = new Employee("1", "John", 10, "male", 21000, "");
+        List<Employee> exceptionEmployees = new ArrayList<>();
+        exceptionEmployees.add(secondEmployee);
+        exceptionEmployees.add(thirdEmployee);
+        given (employeeRepository.queryByGender("male")).willReturn(exceptionEmployees);
+        //when
+        List<Employee> employeesFromDb = employeeService.queryEmployeeByGender("male");
+        //then
+        assertEquals(2, employeesFromDb.size());
+        assertEquals(false, employeesFromDb.contains(firstEmployee));
+    }
+
+
 }

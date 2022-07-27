@@ -27,4 +27,8 @@ public class EmployeeService {
             return false;
         }
     }
+
+    public List<Employee> queryEmployeeByGender(String male) {
+        return employeeRepository.queryByGender(male);
+    }
 }
