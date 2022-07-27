@@ -121,6 +121,23 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].companyName", equalTo("oocl")));
         //then
     }
+
+    @Test
+    void should_return_employee_when_query_by_id_given_employee_id() {
+        //given
+        employeeRepository.insert(new Employee(
+                "1",
+                "Sarah",
+                12,
+                "Female",
+                2000,
+                "abc"
+        ));
+        //when
+
+        //then
+    }
+
     
 
 }
