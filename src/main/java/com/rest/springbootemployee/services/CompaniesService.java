@@ -37,4 +37,8 @@ public class CompaniesService {
     public Boolean updateCompany(String id,Company company) {
         return companiesRepository.updateCompany(id, company);
     }
+
+    public Boolean deleteCompanyById(String id) {
+        return companiesRepository.deleteCompanyById(id);
+    }
 }

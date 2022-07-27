@@ -116,4 +116,15 @@ public class CompaniesServiceTest {
         //then
         assertThat(true).isEqualTo(isUpdate);
     }
+
+    @Test
+    void should_get_true_when_delete_company_given_company_id()throws Exception {
+        //given
+        Company firstCompany = new Company("1", "oocl", new ArrayList<>());
+        given(companiesRepository.deleteCompanyById("1")).willReturn(true);
+        //when
+        Boolean isDelete = companiesService.deleteCompanyById("1");
+        //then
+        assertThat(true).isEqualTo(isDelete);
+    }
 }
