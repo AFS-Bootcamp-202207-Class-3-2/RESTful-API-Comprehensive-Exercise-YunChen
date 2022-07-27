@@ -12,6 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 
@@ -84,6 +85,25 @@ public class EmployeeServiceTest {
         Employee employeeFromDb =employeeService.queryEmployeeById("1");
         assertEquals(employeeFromDb,exceptionEmployee);
     }
+
+    @Test
+    void should_return_page_one_employees_when_query_by_page_given_page_and_page_size() {
+        //given
+        List<Employee> exceptionEmployees = new ArrayList<>();
+        Employee firstEmployee = new Employee("1", "Susan", 20, "Female", 8000, "");
+        Employee secondEmployee = new Employee("1", "Mathew", 20, "Female", 9000, "");
+        Employee thirdEmployee = new Employee("1", "Sarah", 25, "Female", 18000, "");
+        Employee fourthEmployee = new Employee("1", "Mike", 23, "male", 12000, "");
+        exceptionEmployees.add(thirdEmployee);
+        exceptionEmployees.add(fourthEmployee);
+        int page = 2, pageSize = 2;
+        given(employeeRepository.findByPage(page, pageSize)).willReturn(exceptionEmployees);
+        //when
+        List<Employee> employeeByPage = employeeService.findEmployeeByPage(page, pageSize);
+        //then
+        assertThat(employeeByPage).contains(thirdEmployee, fourthEmployee);
+    }
+
 
 
 }

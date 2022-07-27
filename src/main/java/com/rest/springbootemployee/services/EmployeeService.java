@@ -35,4 +35,8 @@ public class EmployeeService {
     public Employee queryEmployeeById(String employeeId) {
         return employeeRepository.queryEmployeeById(employeeId);
     }
+
+    public List<Employee> findEmployeeByPage(int page, int pageSize) {
+        return employeeRepository.findByPage(page, pageSize);
+    }
 }
