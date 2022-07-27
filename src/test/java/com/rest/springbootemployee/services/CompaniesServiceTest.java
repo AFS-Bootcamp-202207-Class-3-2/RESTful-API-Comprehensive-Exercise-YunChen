@@ -32,8 +32,8 @@ public class CompaniesServiceTest {
     void should_get_all_companies_when_query_all_given_request()throws Exception {
         //given
         List<Company> exceptCompanies = new ArrayList<>();
-        Company firstCompany = new Company("1", "oocl", new ArrayList<>());
-        Company secondCompany = new Company("1", "oocl", new ArrayList<>());
+        Company firstCompany = new Company("1", "ooal", new ArrayList<>());
+        Company secondCompany = new Company("1", "oobl", new ArrayList<>());
         Company thirdCompany = new Company("1", "oocl", new ArrayList<>());
         exceptCompanies.add(firstCompany);
         exceptCompanies.add(secondCompany);
@@ -49,8 +49,8 @@ public class CompaniesServiceTest {
     void should_return_right_company_when_query_by_id_given_company_id()throws Exception {
         //given
         List<Company> exceptCompanies = new ArrayList<>();
-        Company firstCompany = new Company("1", "oocl", new ArrayList<>());
-        Company secondCompany = new Company("1", "oocl", new ArrayList<>());
+        Company firstCompany = new Company("1", "ooal", new ArrayList<>());
+        Company secondCompany = new Company("1", "oobl", new ArrayList<>());
         Company thirdCompany = new Company("1", "oocl", new ArrayList<>());
         exceptCompanies.add(firstCompany);
         exceptCompanies.add(secondCompany);
@@ -70,11 +70,29 @@ public class CompaniesServiceTest {
         Employee secondEmployee = new Employee("1", "Mathew", 23, "Female", 12000, "");
         prepareEmployees.add(firstEmployee);
         prepareEmployees.add(secondEmployee);
-        Company firstCompany = new Company("1", "oocl",prepareEmployees);
         given(companiesRepository.queryEmployeesInCompanyById("1")).willReturn(prepareEmployees);
         //when
         List<Employee> companyEmployeesFromDb = companiesService.queryEmployeesInCompanyById("1");
         //then
         assertThat(companyEmployeesFromDb).isEqualTo(prepareEmployees);
+    }
+
+    @Test
+    void should_get_page_second_companies_when_query_by_page_given_page_2_page_size_2()throws Exception {
+        //given
+        List<Company> exceptCompanies = new ArrayList<>();
+        Company firstCompany = new Company("1", "ooal", new ArrayList<>());
+        Company secondCompany = new Company("1", "oobl", new ArrayList<>());
+        Company thirdCompany = new Company("1", "oocl", new ArrayList<>());
+        Company fourthCompany = new Company("1", "oodl",new ArrayList<>());
+        exceptCompanies.add(firstCompany);
+        exceptCompanies.add(secondCompany);
+        exceptCompanies.add(thirdCompany);
+        exceptCompanies.add(fourthCompany);
+        given(companiesRepository.queryCompanyPage(2,2)).willReturn(exceptCompanies);
+        //when
+        List<Company> companyEmployeesFromDb = companiesService.queryCompanyPage(2,2);
+        //then
+        assertThat(companyEmployeesFromDb).isEqualTo(exceptCompanies);
     }
 }

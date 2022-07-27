@@ -25,4 +25,8 @@ public class CompaniesService {
     public List<Employee> queryEmployeesInCompanyById(String id) {
         return companiesRepository.queryEmployeesInCompanyById(id);
     }
+
+    public List<Company> queryCompanyPage(int page, int pageSize) {
+        return companiesRepository.queryCompanyPage(page, pageSize);
+    }
 }
