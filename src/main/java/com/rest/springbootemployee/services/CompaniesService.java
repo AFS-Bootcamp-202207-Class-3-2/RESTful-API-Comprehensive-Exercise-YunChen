@@ -17,4 +17,7 @@ public class CompaniesService {
         return companiesRepository.queryAllCompanies();
     }
 
+    public Company queryCompanyById(String companyId) {
+        return companiesRepository.queryCompanyById(companyId);
+    }
 }
