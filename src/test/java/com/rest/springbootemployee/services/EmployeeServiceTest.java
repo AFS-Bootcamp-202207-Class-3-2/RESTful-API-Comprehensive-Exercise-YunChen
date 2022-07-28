@@ -23,6 +23,8 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 public class EmployeeServiceTest {
@@ -146,7 +148,7 @@ public class EmployeeServiceTest {
     void should_add_employee_in_repository_when_insert_employee_given_message_of_employee() {
         //given
         Employee firstEmployee = new Employee("1", "Susan", 20, "Female", 8000, "");
-        given(employeeDao.saveAndFlush(firstEmployee)).willReturn(firstEmployee);
+        given(employeeDao.save(firstEmployee)).willReturn(firstEmployee);
         //when
         Employee insertEmployee = employeeService.insertEmployee(firstEmployee);
         //then
@@ -158,11 +160,11 @@ public class EmployeeServiceTest {
     void should_count_down_the_employee_when_delete_employee_by_id_given_employee_id() {
         //given
         Employee firstEmployee = new Employee("1", "Susan", 20, "Female", 8000, "");
-//        given(employeeRepository.deleteEmployee("1")).willReturn(true);
+        given(employeeDao.findById("1")).willReturn(Optional.of(firstEmployee));
+        employeeService.removeEmployee(firstEmployee.getId());
+        verify(employeeDao, times(1)).delete(firstEmployee);
         //when
-//        Boolean isInsertEmployee = employeeService.removeEmployee(firstEmployee.getId());
         //then
-//        assertThat(isInsertEmployee).isEqualTo(true);
     }
 
 
