@@ -18,17 +18,14 @@ public class EmployeeService {
 
     @Autowired
     EmployeeDao employeeDao;
+
     public List<Employee> findALl() {
         return employeeDao.findAll();
     }
 
     public Employee update(String id, Employee employeeToUpdate) {
-        Employee employee = employeeDao.findById(id).orElseThrow(EmployeeNotFindException::new);
-        if (employee != null) {
-            employeeToUpdate.setId(employee.getId());
-            employeeDao.save(employeeToUpdate);
-        }
-        return employee;
+        employeeDao.findById(id).orElseThrow(EmployeeNotFindException::new);
+        return employeeDao.save(employeeToUpdate);
     }
 
     public List<Employee> queryEmployeeByGender(String gender) {
