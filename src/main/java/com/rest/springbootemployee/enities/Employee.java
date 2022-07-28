@@ -40,6 +40,10 @@ public class Employee {
     @Column(name = "companyName")
     private String companyName;
 
+    @Column(name = "companyId")
+    private String companyId;
+
+
 
     public Employee(String id, String name, int age, String gender, Integer salary, String companyName) {
         this.id = id;

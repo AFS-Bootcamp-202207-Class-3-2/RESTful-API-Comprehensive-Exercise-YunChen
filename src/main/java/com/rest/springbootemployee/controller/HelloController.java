@@ -40,7 +40,7 @@ public class HelloController {
     @Autowired
     private EmployeeDao employeeDao;
 
-    @GetMapping(value = "/r", params = {"page", "pageSize"})
+    @GetMapping(value = "/pages", params = {"page", "pageSize"})
 
     public R test2(@RequestParam("page")int page,@RequestParam("pageSize")int pageSize) {
         Page<Employee> pageData = employeeDao.findAll(

@@ -36,9 +36,11 @@ public class Company {
         this.employees = employees;
     }
 
-    @Column(name = "company")
+    @Column(name = "companyName")
     private String companyName;
-    @Transient
+    @OneToMany
+//    @OneToMany(targetEntity=Employee.class,mappedBy = "companyName",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    @JoinColumn(name="companyId",referencedColumnName = "id")
     private List<Employee> employees = new ArrayList<>();
 
     @JsonFormat(shape= JsonFormat.Shape.STRING,pattern="yyyy-MM-dd",timezone="GMT+8")
