@@ -243,13 +243,13 @@ public class EmployeeControllerTest {
         employeeDao.save(thirdEmployee);
         employeeDao.save(fourthEmployee);
         String updateEmployeeMsg = "{\n" +
-                "    \"id\": \"2\",\n" +
+                "    \"id\": \"" + saveSecondEmployee.getId() + "\",\n" +
                 "    \"name\": \"Mathew\",\n" +
                 "    \"age\": 12,\n" +
                 "    \"gender\": \"Female\",\n" +
                 "    \"salary\": 50000,\n" +
                 "    \"companyName\": \"abc\",\n" +
-                "    \"companyId\": \""+companyFromDb.getId()+"\"\n" +
+                "    \"companyId\": \"" + companyFromDb.getId() + "\"\n" +
                 "  }";
         //when
         client.perform(MockMvcRequestBuilders.put("/employees/{id}",saveSecondEmployee.getId())
