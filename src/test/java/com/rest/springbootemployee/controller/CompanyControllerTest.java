@@ -107,35 +107,19 @@ public class CompanyControllerTest {
 
 
     @Test
-    void should_return_insert_success_when_insert_company_given_company()throws Exception {
+    void should_return_insert_company_msg_when_insert_company_given_company()throws Exception {
 
         String jsonCompany = "{\n" +
                 "    \"id\": \"1\",\n" +
                 "    \"companyName\": \"spring\",\n" +
-                "    \"employees\": [\n" +
-                "      {\n" +
-                "        \"id\": \"1\",\n" +
-                "        \"name\": \"Mike\",\n" +
-                "        \"age\": 20,\n" +
-                "        \"gender\": \"Female\",\n" +
-                "        \"salary\": 6000,\n" +
-                "        \"companyName\": \"spring\"\n" +
-                "      },\n" +
-                "      {\n" +
-                "        \"id\": \"4\",\n" +
-                "        \"name\": \"czy\",\n" +
-                "        \"age\": 20,\n" +
-                "        \"gender\": \"male\",\n" +
-                "        \"salary\": 18000,\n" +
-                "        \"companyName\": \"spring\"\n" +
-                "      }\n" +
+                "    \"employees\": [ "+
                 "    ]\n" +
                 "  }";
         //given
         Company firstCompany = new Company("1", "oocl", new ArrayList<>());
         Company secondCompany = new Company("2", "aaal", new ArrayList<>());
-        companiesRepository.insertCompany(firstCompany);
-        companiesRepository.insertCompany(secondCompany);
+        companyDao.saveAndFlush(firstCompany);
+        companyDao.saveAndFlush(secondCompany);
         //when
         client.perform(MockMvcRequestBuilders.post("/companies")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -150,38 +134,21 @@ public class CompanyControllerTest {
         String jsonCompany = "{\n" +
                 "    \"id\": \"1\",\n" +
                 "    \"companyName\": \"spring\",\n" +
-                "    \"employees\": [\n" +
-                "      {\n" +
-                "        \"id\": \"1\",\n" +
-                "        \"name\": \"Mike\",\n" +
-                "        \"age\": 20,\n" +
-                "        \"gender\": \"Female\",\n" +
-                "        \"salary\": 6000,\n" +
-                "        \"companyName\": \"spring\"\n" +
-                "      },\n" +
-                "      {\n" +
-                "        \"id\": \"4\",\n" +
-                "        \"name\": \"czy\",\n" +
-                "        \"age\": 20,\n" +
-                "        \"gender\": \"male\",\n" +
-                "        \"salary\": 18000,\n" +
-                "        \"companyName\": \"spring\"\n" +
-                "      }\n" +
+                "    \"employees\": [" +
                 "    ]\n" +
                 "  }";
         //given
         Company firstCompany = new Company("1", "oocl", new ArrayList<>());
         Company secondCompany = new Company("2", "aaal", new ArrayList<>());
-        companiesRepository.insertCompany(firstCompany);
-        companiesRepository.insertCompany(secondCompany);
+        companyDao.saveAndFlush(firstCompany);
+        Company updateCompany = companyDao.saveAndFlush(secondCompany);
         //when
-        client.perform(MockMvcRequestBuilders.put("/companies/{id}","1")
+        client.perform(MockMvcRequestBuilders.put("/companies/{id}",updateCompany.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonCompany));
         //then
-        client.perform(MockMvcRequestBuilders.get("/companies/{id}","1"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.companyName", equalTo("spring")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.employees", hasSize(2)));
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}",updateCompany.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.companyName", equalTo("spring")));
     }
 
 
@@ -190,10 +157,10 @@ public class CompanyControllerTest {
         //given
         Company firstCompany = new Company("1", "oocl", new ArrayList<>());
         Company secondCompany = new Company("2", "aaal", new ArrayList<>());
-        companiesRepository.insertCompany(firstCompany);
-        companiesRepository.insertCompany(secondCompany);
+        companyDao.saveAndFlush(firstCompany);
+        Company deleteCompany = companyDao.saveAndFlush(secondCompany);
         //when
-        client.perform(MockMvcRequestBuilders.delete("/companies/{id}","1"));
+        client.perform(MockMvcRequestBuilders.delete("/companies/{id}",deleteCompany.getId()));
         //then
         client.perform(MockMvcRequestBuilders.get("/companies"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)));
