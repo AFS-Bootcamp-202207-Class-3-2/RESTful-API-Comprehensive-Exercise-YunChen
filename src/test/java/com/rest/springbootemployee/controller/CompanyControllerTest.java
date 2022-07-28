@@ -93,15 +93,15 @@ public class CompanyControllerTest {
         Company secondCompany = new Company("2", "aaal", new ArrayList<>());
         Company thirdCompany = new Company("3", "abc", new ArrayList<>());
         Company fourthCompany = new Company("4", "ddd", new ArrayList<>());
-        companiesRepository.insertCompany(firstCompany);
-        companiesRepository.insertCompany(secondCompany);
-        companiesRepository.insertCompany(thirdCompany);
-        companiesRepository.insertCompany(fourthCompany);
+        companyDao.saveAndFlush(firstCompany);
+        companyDao.saveAndFlush(secondCompany);
+        companyDao.saveAndFlush(thirdCompany);
+        companyDao.saveAndFlush(fourthCompany);
         //when
         client.perform(MockMvcRequestBuilders.get("/companies")
                 .param("page", "2")
                 .param("pageSize", "2"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content", hasSize(2)));
         //then
     }
 

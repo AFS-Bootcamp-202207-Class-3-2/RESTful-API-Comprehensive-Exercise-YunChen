@@ -105,7 +105,7 @@ public class EmployeeServiceTest {
         int page = 2, pageSize = 2;
         given(employeeRepository.findByPage(page, pageSize)).willReturn(exceptionEmployees);
         //when
-        List<Employee> employeeByPage = employeeService.findEmployeeByPage(page, pageSize);
+        List<Employee> employeeByPage = employeeService.findEmployeeByPage(page, pageSize).getContent();
         //then
         assertThat(employeeByPage).contains(thirdEmployee, fourthEmployee);
     }

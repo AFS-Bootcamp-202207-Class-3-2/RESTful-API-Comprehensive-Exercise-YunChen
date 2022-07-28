@@ -5,6 +5,7 @@ import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.services.CompaniesService;
 import com.rest.springbootemployee.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class CompanyController {
     }
 
     @GetMapping(params = {"page", "pageSize"})
-    public List<Company> queryCompanyPage(@RequestParam("page") int page,
+    public Page<Company> queryCompanyPage(@RequestParam("page") int page,
                                           @RequestParam("pageSize") int pageSize) {
         return companiesService.queryCompanyPage(page, pageSize);
     }

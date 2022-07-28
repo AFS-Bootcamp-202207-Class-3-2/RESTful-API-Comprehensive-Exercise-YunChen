@@ -6,6 +6,7 @@ import com.rest.springbootemployee.mapper.EmployeeRepository;
 import com.rest.springbootemployee.services.EmployeeService;
 import com.rest.springbootemployee.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +35,7 @@ public class EmployeeController {
     }
 
     @GetMapping(params = {"page", "pageSize"})
-    public List<Employee> findByPage(@RequestParam("page") int page,
+    public Page<Employee> findByPage(@RequestParam("page") int page,
                                      @RequestParam("pageSize") int pageSize) {
         return employeeService.findEmployeeByPage(page, pageSize);
     }

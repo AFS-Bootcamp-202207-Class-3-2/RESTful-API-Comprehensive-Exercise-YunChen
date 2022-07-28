@@ -5,6 +5,7 @@ import com.rest.springbootemployee.exception.EmployeeNotFindException;
 import com.rest.springbootemployee.mapper.EmployeeDao;
 import com.rest.springbootemployee.mapper.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -38,8 +39,8 @@ public class EmployeeService {
         return employeeDao.findById(employeeId).orElseThrow(EmployeeNotFindException::new);
     }
 
-    public List<Employee> findEmployeeByPage(int page, int pageSize) {
-        return employeeDao.findAll(PageRequest.of(page - 1, pageSize)).getContent();
+    public Page<Employee> findEmployeeByPage(int page, int pageSize) {
+        return employeeDao.findAll(PageRequest.of(page - 1, pageSize));
     }
 
     public Employee insertEmployee(Employee insertEmployee) {

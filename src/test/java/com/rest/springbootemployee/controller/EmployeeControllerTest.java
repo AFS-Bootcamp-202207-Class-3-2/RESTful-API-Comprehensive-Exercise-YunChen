@@ -206,7 +206,7 @@ public class EmployeeControllerTest {
         client.perform(MockMvcRequestBuilders.get("/employees")
                         .param("page", "1")
                         .param("pageSize", "2"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content", hasSize(2)));
         //then
     }
 
