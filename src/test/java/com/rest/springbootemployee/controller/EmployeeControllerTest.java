@@ -163,22 +163,24 @@ public class EmployeeControllerTest {
     @Test
     void should_return_employee_when_query_by_id_given_employee_id() throws Exception {
         //given
-        employeeRepository.insert(new Employee(
+        Employee employee = new Employee(
                 "1",
                 "Sarah",
                 12,
                 "Female",
                 2000,
                 "abc"
-        ));
+        );
+        employee.setCompanyId(companyFromDb.getId());
+        Employee saveEmployeeFromDb = employeeDao.save(employee);
         //when
-        client.perform(MockMvcRequestBuilders.get("/employees/{id}","1"))
+        client.perform(MockMvcRequestBuilders.get("/employees/{id}", saveEmployeeFromDb.getId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isString())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name",equalTo("Sarah")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.age",equalTo(12)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.gender",equalTo("Female")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.salary",equalTo(2000)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.companyName",equalTo("abc")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", equalTo("Sarah")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.age", equalTo(12)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.gender", equalTo("Female")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.salary", equalTo(2000)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.companyName", equalTo("abc")));
         //then
     }
 
