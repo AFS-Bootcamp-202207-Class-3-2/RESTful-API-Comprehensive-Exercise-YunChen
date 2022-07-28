@@ -39,9 +39,8 @@ public class CompanyController {
     }
 
     @PostMapping
-    public String insertCompany(@RequestBody Company company) {
-        companiesService.insertCompany(company);
-        return Constant.ADD_COMPANY_SUCCESS;
+    public Company insertCompany(@RequestBody Company company) {
+        return companiesService.insertCompany(company);
     }
 
     @PutMapping("/{id}")

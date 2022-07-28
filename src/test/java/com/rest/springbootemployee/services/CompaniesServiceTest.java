@@ -3,6 +3,7 @@ package com.rest.springbootemployee.services;
 import com.rest.springbootemployee.enities.Company;
 import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.mapper.CompaniesRepository;
+import com.rest.springbootemployee.mapper.CompanyDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +23,8 @@ public class CompaniesServiceTest {
     CompaniesRepository companiesRepository;
     @InjectMocks
     CompaniesService companiesService;
+    @Mock
+    CompanyDao companyDao;
     @BeforeEach
     void initData() {
         companiesRepository.setNextId("1");
@@ -99,11 +102,11 @@ public class CompaniesServiceTest {
     void should_increase_company_when_insert_company_given_company_msg()throws Exception {
         //given
         Company firstCompany = new Company("1", "ooal", new ArrayList<>());
-        given(companiesRepository.insertCompany(firstCompany)).willReturn(true);
+        given(companyDao.saveAndFlush(firstCompany)).willReturn(firstCompany);
         //when
-        Boolean isInsert = companiesService.insertCompany(firstCompany);
+        Company insertCompany = companiesService.insertCompany(firstCompany);
         //then
-        assertThat(true).isEqualTo(isInsert);
+        assertThat(firstCompany).isEqualTo(insertCompany);
     }
 
     @Test

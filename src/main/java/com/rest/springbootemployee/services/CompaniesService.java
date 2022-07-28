@@ -6,6 +6,9 @@ import com.rest.springbootemployee.exception.CompanyNotFindException;
 import com.rest.springbootemployee.mapper.CompaniesRepository;
 import com.rest.springbootemployee.mapper.CompanyDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +35,6 @@ public class CompaniesService {
     }
 
     public List<Employee> queryEmployeesInCompanyById(String companyId) {
-
         Optional<Company> optionalCompany = companyDao.findById(companyId);
         if (optionalCompany.isPresent()) {
             return optionalCompany.get().getEmployees();
@@ -41,11 +43,12 @@ public class CompaniesService {
     }
 
     public List<Company> queryCompanyPage(int page, int pageSize) {
-        return companiesRepository.queryCompanyPage(page, pageSize);
+        Page<Company> allCompanies = companyDao.findAll(PageRequest.of(page, pageSize));
+        return allCompanies.getContent();
     }
 
-    public Boolean insertCompany(Company company) {
-        return companiesRepository.insertCompany(company);
+    public Company insertCompany(Company company) {
+        return companyDao.saveAndFlush(company);
     }
 
     public Boolean updateCompany(String id,Company company) {
