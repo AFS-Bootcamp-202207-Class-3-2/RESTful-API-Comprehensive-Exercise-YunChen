@@ -3,6 +3,9 @@ package com.rest.springbootemployee.controller;
 import com.alibaba.fastjson.JSON;
 import com.rest.springbootemployee.enities.Company;
 import com.rest.springbootemployee.mapper.CompaniesRepository;
+import com.rest.springbootemployee.mapper.CompanyDao;
+import com.rest.springbootemployee.mapper.EmployeeDao;
+import com.rest.springbootemployee.services.CompaniesService;
 import com.rest.springbootemployee.utils.Constant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,9 +31,17 @@ public class CompanyControllerTest {
     CompaniesRepository companiesRepository;
     @BeforeEach
     void prepareForTest() {
-        companiesRepository.setNextId("1");
-        companiesRepository.getCompanies().clear();
+        employeeDao.deleteAll();
+        companyDao.deleteAll();
     }
+
+    @Autowired
+    EmployeeDao employeeDao;
+    @Autowired
+    CompanyDao companyDao;
+
+    @Autowired
+    CompaniesService companiesService;
 
     @Autowired
     MockMvc client;
@@ -40,8 +51,8 @@ public class CompanyControllerTest {
         //given
         Company firstCompany = new Company("1", "oocl", new ArrayList<>());
         Company secondCompany = new Company("1", "oocl", new ArrayList<>());
-        companiesRepository.insertCompany(firstCompany);
-        companiesRepository.insertCompany(secondCompany);
+        companyDao.saveAndFlush(firstCompany);
+        companyDao.saveAndFlush(secondCompany);
         //when
         client.perform(MockMvcRequestBuilders.get("/companies"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)));
@@ -53,10 +64,10 @@ public class CompanyControllerTest {
         //given
         Company firstCompany = new Company("1", "oocl", new ArrayList<>());
         Company secondCompany = new Company("2", "aaal", new ArrayList<>());
-        companiesRepository.insertCompany(firstCompany);
-        companiesRepository.insertCompany(secondCompany);
+        companyDao.saveAndFlush(firstCompany);
+        Company secondCompanySave = companyDao.saveAndFlush(secondCompany);
         //when
-        client.perform(MockMvcRequestBuilders.get("/companies/{id}","2"))
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}",secondCompanySave.getId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isString())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.companyName",equalTo("aaal")));
         //then
