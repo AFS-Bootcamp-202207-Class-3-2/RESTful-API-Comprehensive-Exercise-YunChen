@@ -22,6 +22,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 public class CompaniesServiceTest {
@@ -129,10 +131,9 @@ public class CompaniesServiceTest {
     void should_get_true_when_delete_company_given_company_id()throws Exception {
         //given
         Company firstCompany = new Company("1", "oocl", new ArrayList<>());
-//        given(companyDao.delete(firstCompany)).willReturn(firstCompany);
-//        //when
-//        Boolean isDelete = companiesService.deleteCompanyById("1");
+        companyDao.delete(firstCompany);
+        verify(companyDao, times(1)).delete(firstCompany);
+        //when
         //then
-//        assertThat(true).isEqualTo(isDelete);
     }
 }
