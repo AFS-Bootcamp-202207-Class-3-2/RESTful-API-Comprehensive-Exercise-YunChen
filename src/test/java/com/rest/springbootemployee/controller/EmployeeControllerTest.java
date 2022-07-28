@@ -185,6 +185,11 @@ public class EmployeeControllerTest {
     }
 
 
+    void addCompanyId(Employee ...employees) {
+        for (int i = 0; i < employees.length; i++) {
+            employees[i].setCompanyId(companyFromDb.getId());
+        }
+    }
     @Test
     void should_return_third_fourth_employee_when_find_by_page_given_page_2_page_size_2() throws Exception {
         //given
@@ -192,13 +197,14 @@ public class EmployeeControllerTest {
         Employee secondEmployee = new Employee("1", "Mathew", 12, "Female", 22000, "abc");
         Employee thirdEmployee = new Employee("1", "Hang", 12, "Female", 12000, "abc");
         Employee fourthEmployee = new Employee("1", "Done", 12, "Female", 2000, "abc");
-        employeeRepository.insert(firstEmployee);
-        employeeRepository.insert(secondEmployee);
-        employeeRepository.insert(thirdEmployee);
-        employeeRepository.insert(fourthEmployee);
+        addCompanyId(firstEmployee,secondEmployee,thirdEmployee,fourthEmployee);
+        employeeDao.save(firstEmployee);
+        employeeDao.save(secondEmployee);
+        employeeDao.save(thirdEmployee);
+        employeeDao.save(fourthEmployee);
         //when
         client.perform(MockMvcRequestBuilders.get("/employees")
-                        .param("page", "2")
+                        .param("page", "1")
                         .param("pageSize", "2"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)));
         //then
@@ -212,12 +218,13 @@ public class EmployeeControllerTest {
         Employee secondEmployee = new Employee("1", "Mathew", 12, "Female", 22000, "abc");
         Employee thirdEmployee = new Employee("1", "Hang", 12, "Female", 12000, "abc");
         Employee fourthEmployee = new Employee("1", "Done", 12, "Female", 2000, "abc");
-        employeeRepository.insert(firstEmployee);
-        employeeRepository.insert(secondEmployee);
-        employeeRepository.insert(thirdEmployee);
-        employeeRepository.insert(fourthEmployee);
+        addCompanyId(firstEmployee,secondEmployee,thirdEmployee,fourthEmployee);
+        employeeDao.save(firstEmployee);
+        Employee saveSecondEmployee = employeeDao.save(secondEmployee);
+        employeeDao.save(thirdEmployee);
+        employeeDao.save(fourthEmployee);
         //when
-        client.perform(MockMvcRequestBuilders.delete("/employees/{id}","2"));
+        client.perform(MockMvcRequestBuilders.delete("/employees/{id}",saveSecondEmployee.getId()));
         //then
         client.perform(MockMvcRequestBuilders.get("/employees"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(3)));
@@ -230,24 +237,26 @@ public class EmployeeControllerTest {
         Employee secondEmployee = new Employee("2", "Mathew", 12, "Female", 22000, "abc");
         Employee thirdEmployee = new Employee("1", "Hang", 12, "Female", 12000, "abc");
         Employee fourthEmployee = new Employee("1", "Done", 12, "Female", 2000, "abc");
-        employeeRepository.insert(firstEmployee);
-        employeeRepository.insert(secondEmployee);
-        employeeRepository.insert(thirdEmployee);
-        employeeRepository.insert(fourthEmployee);
+        addCompanyId(firstEmployee,secondEmployee,thirdEmployee,fourthEmployee);
+        employeeDao.save(firstEmployee);
+        Employee saveSecondEmployee = employeeDao.save(secondEmployee);
+        employeeDao.save(thirdEmployee);
+        employeeDao.save(fourthEmployee);
         String updateEmployeeMsg = "{\n" +
                 "    \"id\": \"2\",\n" +
                 "    \"name\": \"Mathew\",\n" +
                 "    \"age\": 12,\n" +
                 "    \"gender\": \"Female\",\n" +
                 "    \"salary\": 50000,\n" +
-                "    \"companyName\": \"abc\"\n" +
+                "    \"companyName\": \"abc\",\n" +
+                "    \"companyId\": \""+companyFromDb.getId()+"\"\n" +
                 "  }";
         //when
-        client.perform(MockMvcRequestBuilders.put("/employees/{id}","2")
+        client.perform(MockMvcRequestBuilders.put("/employees/{id}",saveSecondEmployee.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(updateEmployeeMsg));
         //then
-        client.perform(MockMvcRequestBuilders.get("/employees/{id}","2"))
+        client.perform(MockMvcRequestBuilders.get("/employees/{id}",saveSecondEmployee.getId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isString())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.salary",equalTo(50000)));
     }

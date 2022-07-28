@@ -39,7 +39,7 @@ public class EmployeeService {
     }
 
     public List<Employee> findEmployeeByPage(int page, int pageSize) {
-        return employeeDao.findAll(PageRequest.of(page, pageSize)).getContent();
+        return employeeDao.findAll(PageRequest.of(page - 1, pageSize)).getContent();
     }
 
     public Employee insertEmployee(Employee insertEmployee) {
