@@ -17,6 +17,7 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
+    //companyId:1552582897884463104
     @GetMapping(params = {"gender"})
     public List<Employee> queryGender(@RequestParam("gender") String gender) {
         return employeeService.queryEmployeeByGender(gender);

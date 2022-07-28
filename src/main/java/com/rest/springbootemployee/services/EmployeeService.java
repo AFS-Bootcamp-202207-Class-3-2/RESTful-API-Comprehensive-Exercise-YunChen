@@ -28,9 +28,9 @@ public class EmployeeService {
         return employee;
     }
 
-    public List<Employee> queryEmployeeByGender(String male) {
-//        employeeDao.findBy()
-        return employeeRepository.queryByGender(male);
+    public List<Employee> queryEmployeeByGender(String gender) {
+        System.out.println(gender);
+        return employeeDao.findByGender(gender);
     }
 
     public Employee queryEmployeeById(String employeeId) {
@@ -41,8 +41,10 @@ public class EmployeeService {
         return employeeRepository.findByPage(page, pageSize);
     }
 
-    public Boolean insertEmployee(Employee insertEmployee) {
-        return employeeRepository.insert(insertEmployee);
+    public Employee insertEmployee(Employee insertEmployee) {
+        Employee saveEmployee = employeeDao.save(insertEmployee);
+        insertEmployee.setId(saveEmployee.getId());
+        return insertEmployee;
     }
 
     public Boolean removeEmployee(String removeEmployeeId) {

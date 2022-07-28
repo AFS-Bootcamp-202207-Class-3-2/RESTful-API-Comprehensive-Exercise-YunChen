@@ -1,6 +1,9 @@
 package com.rest.springbootemployee.controller;
 
+import com.rest.springbootemployee.enities.Company;
 import com.rest.springbootemployee.enities.Employee;
+import com.rest.springbootemployee.mapper.CompanyDao;
+import com.rest.springbootemployee.mapper.EmployeeDao;
 import com.rest.springbootemployee.mapper.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,10 +34,21 @@ public class EmployeeControllerTest {
 
     @BeforeEach
     public void beforePrepare() {
-        employeeRepository.setNextId("1");
-        employeeRepository.getEmployees().clear();
+        employeeDao.deleteAll();
+        Company firstCompany = new Company("", "abc", new ArrayList<>());
+        Employee firstEmployee = new Employee("", "YunChen", 18, "male", 18000, firstCompany.getCompanyName());
+        Employee secondEmployee = new Employee("", "Sarah", 18, "Female", 22000, firstCompany.getCompanyName());
+        Employee thirdEmployee = new Employee("", "Sarah", 18, "Female", 22000, firstCompany.getCompanyName());
+        Employee fourthEmployee = new Employee("", "Sarah", 18, "Female", 22000, firstCompany.getCompanyName());
+        Company saveCompany = companyDao.save(firstCompany);
+//        companyDao.findById()
     }
 
+    @Autowired
+    CompanyDao companyDao;
+
+    @Autowired
+    EmployeeDao employeeDao;
     @Autowired
     EmployeeRepository employeeRepository;
 

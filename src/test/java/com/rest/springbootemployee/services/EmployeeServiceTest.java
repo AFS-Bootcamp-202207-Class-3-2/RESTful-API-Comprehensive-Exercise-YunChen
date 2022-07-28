@@ -1,6 +1,7 @@
 package com.rest.springbootemployee.services;
 
 import com.rest.springbootemployee.enities.Employee;
+import com.rest.springbootemployee.mapper.EmployeeDao;
 import com.rest.springbootemployee.mapper.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,10 +20,15 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(SpringExtension.class)
 public class EmployeeServiceTest {
 
+
+    @Mock
+    EmployeeDao employeeDao;
     @Mock
     EmployeeRepository employeeRepository;
     @InjectMocks
     EmployeeService employeeService;
+
+
 
     @BeforeEach
     void initData() {
@@ -108,11 +114,11 @@ public class EmployeeServiceTest {
     void should_add_employee_in_repository_when_insert_employee_given_message_of_employee() {
         //given
         Employee firstEmployee = new Employee("1", "Susan", 20, "Female", 8000, "");
-        given(employeeRepository.insert(firstEmployee)).willReturn(true);
+        given(employeeDao.saveAndFlush(firstEmployee)).willReturn(firstEmployee);
         //when
-        Boolean isInsertEmployee = employeeService.insertEmployee(firstEmployee);
+        Employee insertEmployee = employeeService.insertEmployee(firstEmployee);
         //then
-        assertThat(isInsertEmployee).isEqualTo(true);
+        assertThat(insertEmployee).isEqualTo(firstEmployee);
     }
 
 
