@@ -30,11 +30,8 @@ public class CompaniesService {
     }
 
     public List<Employee> queryEmployeesInCompanyById(String companyId) {
-        Optional<Company> optionalCompany = companyDao.findById(companyId);
-        if (optionalCompany.isPresent()) {
-            return optionalCompany.get().getEmployees();
-        }
-        throw new CompanyNotFindException();
+        Company company = companyDao.findById(companyId).orElseThrow(CompanyNotFindException::new);
+        return company.getEmployees();
     }
 
     public List<Company> queryCompanyPage(int page, int pageSize) {
@@ -43,23 +40,19 @@ public class CompaniesService {
     }
 
     public Company insertCompany(Company company) {
-        return companyDao.saveAndFlush(company);
+        Company companyInsert = companyDao.saveAndFlush(company);
+        return companyInsert;
     }
 
     public Company updateCompany(String id,Company company) {
-        Optional<Company> optionalCompany = companyDao.findById(id);
-        if (optionalCompany.isPresent()) {
-            return companyDao.save(company);
-        }
-        throw new CompanyNotFindException();
+        Company companyFromDb = companyDao.findById(id).orElseThrow(CompanyNotFindException::new);
+        company.setId(companyFromDb.getId());
+        return companyDao.saveAndFlush(company);
     }
 
-    public Boolean deleteCompanyById(String id) {
-        Optional<Company> optionalCompany = companyDao.findById(id);
-        if (optionalCompany.isPresent()) {
-             companyDao.delete(optionalCompany.get());
-            return true;
-        }
-        throw new CompanyNotFindException();
+    public Company deleteCompanyById(String id) {
+        Company deleteCompany = companyDao.findById(id).orElseThrow(CompanyNotFindException::new);
+        companyDao.delete(deleteCompany);
+        return deleteCompany;
     }
 }

@@ -45,15 +45,13 @@ public class CompanyController {
 
     @PutMapping("/{id}")
     public Company updateCompany(@PathVariable("id") String companyId,
-                                @RequestBody Company company) {
-        return companiesService.updateCompany(companyId, company) ;
+                                 @RequestBody Company company) {
+        return companiesService.updateCompany(companyId, company);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteCompanyById(@PathVariable("id") String companyId) {
-        boolean isSuccessDelete = companiesService.deleteCompanyById(companyId);
-        return isSuccessDelete ?
-                Constant.DELETE_COMPANY_SUCCESS :
-                Constant.COMPANY_IS_NOT_EXIST;
+    public Company deleteCompanyById(@PathVariable("id") String companyId) {
+        return companiesService.deleteCompanyById(companyId);
+
     }
 }
