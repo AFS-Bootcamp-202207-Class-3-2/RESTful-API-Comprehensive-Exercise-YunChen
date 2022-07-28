@@ -46,7 +46,7 @@ public class CompaniesService {
     public Company updateCompany(String id,Company company) {
         Company companyFromDb = companyDao.findById(id).orElseThrow(CompanyNotFindException::new);
         company.setId(companyFromDb.getId());
-        return companyDao.saveAndFlush(company);
+        return companyDao.save(company);
     }
 
     public Company deleteCompanyById(String id) {

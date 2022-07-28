@@ -117,7 +117,8 @@ public class CompaniesServiceTest {
     void should_get_true_when_update_company_given_company_msg()throws Exception {
         //given
         Company firstCompany = new Company("1", "oocl", new ArrayList<>());
-        given(companiesRepository.updateCompany("1",firstCompany)).willReturn(true);
+        given(companyDao.save(firstCompany)).willReturn(firstCompany);
+        given(companyDao.findById("1")).willReturn(Optional.of(firstCompany));
         //when
         Company updateCompany = companiesService.updateCompany("1",firstCompany);
         //then
