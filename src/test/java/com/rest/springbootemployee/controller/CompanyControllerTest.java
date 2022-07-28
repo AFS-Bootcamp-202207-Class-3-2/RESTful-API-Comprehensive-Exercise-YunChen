@@ -2,6 +2,7 @@ package com.rest.springbootemployee.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.rest.springbootemployee.enities.Company;
+import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.mapper.CompaniesRepository;
 import com.rest.springbootemployee.mapper.CompanyDao;
 import com.rest.springbootemployee.mapper.EmployeeDao;
@@ -16,9 +17,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 
 @SpringBootTest
@@ -128,6 +133,38 @@ public class CompanyControllerTest {
         client.perform(MockMvcRequestBuilders.get("/companies"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(3)));
     }
+    @Test
+    public void should_return_company_employees_when_query_employees_by_companyee_id_given_company_id()throws Exception {
+        //given
+        Company firstCompany = new Company("1", "oocl", new ArrayList<>());
+        Company secondCompany = new Company("2", "aaal", new ArrayList<>());
+        Company companyFromDb = companyDao.saveAndFlush(firstCompany);
+        companyDao.saveAndFlush(secondCompany);
+        Employee firstEmployee = new Employee("", "YunChen", 18, "male", 18000, companyFromDb.getCompanyName());
+        firstEmployee.setCompanyId(companyFromDb.getId());
+        Employee secondEmployee = new Employee("", "Sarah", 18, "Female", 22000, companyFromDb.getCompanyName());
+        secondEmployee.setCompanyId(companyFromDb.getId());
+        Employee thirdEmployee = new Employee("", "Mike", 18, "Female", 22000, companyFromDb.getCompanyName());
+        thirdEmployee.setCompanyId(companyFromDb.getId());
+        Employee fourthEmployee = new Employee("", "Jack", 18, "Female", 22000, companyFromDb.getCompanyName());
+        fourthEmployee.setCompanyId(companyFromDb.getId());
+        Employee firstSave = employeeDao.saveAndFlush(firstEmployee);
+        Employee secondSave = employeeDao.saveAndFlush(secondEmployee);
+        Employee thirdSave = employeeDao.saveAndFlush(thirdEmployee);
+        Employee fourthSave = employeeDao.saveAndFlush(fourthEmployee);
+        //when
+        List<Employee> employees = companiesService.queryEmployeesInCompanyById(companyFromDb.getId());
+        List<String> ids = employees.stream().map((Employee::getId)).collect(Collectors.toList());
+        //then
+        System.out.println(employees.size());
+        assertThat(ids).contains(firstSave.getId(),secondSave.getId(),thirdSave.getId(),fourthSave.getId());
+    }
+
+    void saveBatchEmployees(Employee... employees) {
+        for (int i = 0; i < employees.length; i++) {
+            employeeDao.save(employees[i]);
+        }
+    }
 
     @Test
     void should_change_name_of_company_when_update_given_update_msg()throws Exception {
@@ -153,7 +190,7 @@ public class CompanyControllerTest {
 
 
     @Test
-    void should_increase_number_when_delete_given_company_id()throws Exception {
+    void should_decrease_number_when_delete_given_company_id()throws Exception {
         //given
         Company firstCompany = new Company("1", "oocl", new ArrayList<>());
         Company secondCompany = new Company("2", "aaal", new ArrayList<>());
