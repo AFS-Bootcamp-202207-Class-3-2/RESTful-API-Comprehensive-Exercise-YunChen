@@ -64,15 +64,7 @@ public class EmployeeRepository implements InitializingBean {
         }
     }
 
-    public boolean updateAnEmployee(String employeeId , Employee employee) {
-        try {
-            Employee employeeFromDb = queryEmployeeById(employeeId);
-            employeeFromDb.setSalary(employee.getSalary());
-            return true;
-        }catch (EmployeeNotFindException exception) {
-            return false;
-        }
-    }
+
 
     @Override
     public void afterPropertiesSet() throws Exception {
