@@ -113,7 +113,7 @@ public class EmployeeServiceTest {
         //given
         Employee exceptionEmployee = new Employee("1", "Susan", 20, "Female", 8000, "");
         //when
-//        given (employeeRepository.queryEmployeeById("1")).willReturn(exceptionEmployee);
+        given (employeeDao.findById("1")).willReturn(Optional.of(exceptionEmployee));
         //then
         Employee employeeFromDb =employeeService.queryEmployeeById("1");
         assertEquals(employeeFromDb,exceptionEmployee);
