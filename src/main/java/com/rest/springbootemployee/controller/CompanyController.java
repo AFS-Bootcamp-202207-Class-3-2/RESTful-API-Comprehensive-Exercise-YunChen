@@ -44,11 +44,9 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public String updateCompany(@PathVariable("id") String companyId,
+    public Company updateCompany(@PathVariable("id") String companyId,
                                 @RequestBody Company company) {
-        return companiesService.updateCompany(companyId, company) ?
-                Constant.UPDATE_COMPANY_SUCCESS :
-                Constant.COMPANY_IS_NOT_EXIST;
+        return companiesService.updateCompany(companyId, company) ;
     }
 
     @DeleteMapping("/{id}")

@@ -20,8 +20,6 @@ public class CompaniesService {
 
     @Autowired
     private CompanyDao companyDao;
-    @Autowired
-    private CompaniesRepository companiesRepository;
     public List<Company> queryAllCompanies() {
         return companyDao.findAll();
     }
@@ -51,11 +49,20 @@ public class CompaniesService {
         return companyDao.saveAndFlush(company);
     }
 
-    public Boolean updateCompany(String id,Company company) {
-        return companiesRepository.updateCompany(id, company);
+    public Company updateCompany(String id,Company company) {
+        Optional<Company> optionalCompany = companyDao.findById(id);
+        if (optionalCompany.isPresent()) {
+            return companyDao.save(company);
+        }
+        throw new CompanyNotFindException();
     }
 
     public Boolean deleteCompanyById(String id) {
-        return companiesRepository.deleteCompanyById(id);
+        Optional<Company> optionalCompany = companyDao.findById(id);
+        if (optionalCompany.isPresent()) {
+             companyDao.delete(optionalCompany.get());
+            return true;
+        }
+        throw new CompanyNotFindException();
     }
 }

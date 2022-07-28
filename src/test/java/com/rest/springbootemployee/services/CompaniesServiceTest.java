@@ -115,9 +115,9 @@ public class CompaniesServiceTest {
         Company firstCompany = new Company("1", "oocl", new ArrayList<>());
         given(companiesRepository.updateCompany("1",firstCompany)).willReturn(true);
         //when
-        Boolean isUpdate = companiesService.updateCompany("1",firstCompany);
+        Company updateCompany = companiesService.updateCompany("1",firstCompany);
         //then
-        assertThat(true).isEqualTo(isUpdate);
+        assertThat(updateCompany).isEqualTo(firstCompany);
     }
 
     @Test
