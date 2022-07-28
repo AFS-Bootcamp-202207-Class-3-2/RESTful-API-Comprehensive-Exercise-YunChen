@@ -43,9 +43,7 @@ public class EmployeeService {
     }
 
     public Employee insertEmployee(Employee insertEmployee) {
-        Employee saveEmployee = employeeDao.save(insertEmployee);
-        insertEmployee.setId(saveEmployee.getId());
-        return insertEmployee;
+        return employeeDao.save(insertEmployee);
     }
 
     public Employee removeEmployee(String removeEmployeeId) {

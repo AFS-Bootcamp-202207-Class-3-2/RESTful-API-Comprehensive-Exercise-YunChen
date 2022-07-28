@@ -5,6 +5,7 @@ import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.mapper.CompanyDao;
 import com.rest.springbootemployee.mapper.EmployeeDao;
 import com.rest.springbootemployee.mapper.EmployeeRepository;
+import com.rest.springbootemployee.services.EmployeeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,30 +33,48 @@ public class EmployeeControllerTest {
     @Autowired
     MockMvc client;
 
+    Company companyFromDb;
     @BeforeEach
     public void beforePrepare() {
         employeeDao.deleteAll();
-        Company firstCompany = new Company("", "abc", new ArrayList<>());
-        Employee firstEmployee = new Employee("", "YunChen", 18, "male", 18000, firstCompany.getCompanyName());
-        Employee secondEmployee = new Employee("", "Sarah", 18, "Female", 22000, firstCompany.getCompanyName());
-        Employee thirdEmployee = new Employee("", "Sarah", 18, "Female", 22000, firstCompany.getCompanyName());
-        Employee fourthEmployee = new Employee("", "Sarah", 18, "Female", 22000, firstCompany.getCompanyName());
-        Company saveCompany = companyDao.save(firstCompany);
-//        companyDao.findById()
+        companyDao.deleteAll();
+        Company company = new Company("", "spring", null);
+        Company companyFromDb = companyDao.saveAndFlush(company);
+        this.companyFromDb = companyFromDb;
+    }
+
+    private void saveFourEmployees() {
+        Employee firstEmployee = new Employee("", "YunChen", 18, "male", 18000, companyFromDb.getCompanyName());
+        firstEmployee.setCompanyId(companyFromDb.getId());
+        Employee secondEmployee = new Employee("", "Sarah", 18, "Female", 22000, companyFromDb.getCompanyName());
+        secondEmployee.setCompanyId(companyFromDb.getId());
+        Employee thirdEmployee = new Employee("", "Mike", 18, "Female", 22000, companyFromDb.getCompanyName());
+        thirdEmployee.setCompanyId(companyFromDb.getId());
+        Employee fourthEmployee = new Employee("", "Jack", 18, "Female", 22000, companyFromDb.getCompanyName());
+        fourthEmployee.setCompanyId(companyFromDb.getId());
+        employeeService.insertEmployee(firstEmployee);
+        employeeService.insertEmployee(secondEmployee);
+        employeeService.insertEmployee(fourthEmployee);
+        employeeService.insertEmployee(thirdEmployee);
     }
 
     @Autowired
     CompanyDao companyDao;
 
     @Autowired
-    EmployeeDao employeeDao;
+    EmployeeService employeeService;
     @Autowired
     EmployeeRepository employeeRepository;
+
+    @Autowired
+    EmployeeDao employeeDao;
 
     @Test
     void should_get_all_employees_when_perform_get_given_employees() throws Exception {
         //given
-        employeeRepository.insert(new Employee("6", "Salay", 22, "Female", 10000, ""));
+        Employee employee = new Employee("6", "Salay", 22, "Female", 10000, "");
+        employee.setCompanyId(companyFromDb.getId());
+        Employee employeeFromDb = employeeDao.save(employee);
         //when
         client.perform(MockMvcRequestBuilders.get("/employees"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -78,7 +97,8 @@ public class EmployeeControllerTest {
                 "    \"age\": 20,\n" +
                 "    \"gender\": \"Female\",\n" +
                 "    \"salary\": 8000,\n" +
-                "    \"companyName\": \"oocl\"\n" +
+                "    \"companyName\": \"oocl\",\n" +
+                "    \"company_id\": \""+companyFromDb.getId()+"\"\n" +
                 "  }";
         //when
         client.perform(MockMvcRequestBuilders.post("/employees")
@@ -91,9 +111,8 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.companyName").value("oocl"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(8000));
         //then
-        List<Employee> allEmployees = employeeRepository.getAllEmployees();
+        List<Employee> allEmployees = employeeService.findALl();
         assertThat(allEmployees, hasSize(1));
-        assertThat(allEmployees.get(0).getId(), equalTo("1"));
         assertThat(allEmployees.get(0).getName(), equalTo("Lily"));
         assertThat(allEmployees.get(0).getAge(), equalTo(20));
         assertThat(allEmployees.get(0).getGender(), equalTo("Female"));
@@ -111,7 +130,8 @@ public class EmployeeControllerTest {
                 "    \"age\": 20,\n" +
                 "    \"gender\": \"Female\",\n" +
                 "    \"salary\": 8000,\n" +
-                "    \"companyName\": \"oocl\"\n" +
+                "    \"companyName\": \"oocl\",\n" +
+                "    \"companyId\": \""+companyFromDb.getId()+"\"\n" +
                 "  }";
         String maleEmployee = "{\n" +
                 "    \"id\": \"1\",\n" +
@@ -119,7 +139,8 @@ public class EmployeeControllerTest {
                 "    \"age\": 20,\n" +
                 "    \"gender\": \"male\",\n" +
                 "    \"salary\": 8000,\n" +
-                "    \"companyName\": \"oocl\"\n" +
+                "    \"companyName\": \"oocl\",\n" +
+                "    \"companyId\": \""+companyFromDb.getId()+"\"\n" +
                 "  }";
         client.perform(MockMvcRequestBuilders.post("/employees")
                 .contentType(MediaType.APPLICATION_JSON)
