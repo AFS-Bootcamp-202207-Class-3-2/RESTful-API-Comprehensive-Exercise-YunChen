@@ -2,6 +2,7 @@ package com.rest.springbootemployee.services;
 
 import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.exception.EmployeeNotFindException;
+import com.rest.springbootemployee.mapper.EmployeeDao;
 import com.rest.springbootemployee.mapper.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,23 +13,23 @@ import java.util.List;
 public class EmployeeService {
     @Autowired
     EmployeeRepository employeeRepository;
+
+    @Autowired
+    EmployeeDao employeeDao;
     public List<Employee> findALl() {
-        return employeeRepository.getAllEmployees();
+        return employeeDao.findAll();
     }
 
-    public Boolean update(String id, Employee employeeToUpdate) {
-        try {
-            Employee employeeFromDb = employeeRepository.queryEmployeeById(id);
-            if (employeeToUpdate.getSalary() != null) {
-                employeeFromDb.setSalary(employeeToUpdate.getSalary() );
-            }
-            return true;
-        }catch (EmployeeNotFindException exception) {
-            return false;
+    public Employee update(String id, Employee employeeToUpdate) {
+        Employee employee = employeeDao.findById(id).orElseThrow(EmployeeNotFindException::new);
+        if (employee != null) {
+            employeeDao.save(employee);
         }
+        return employee;
     }
 
     public List<Employee> queryEmployeeByGender(String male) {
+//        employeeDao.findBy()
         return employeeRepository.queryByGender(male);
     }
 

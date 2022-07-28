@@ -25,11 +25,8 @@ public class CompaniesService {
     }
 
     public Company queryCompanyById(String companyId) {
-        Optional<Company> optionalCompany = companyDao.findById(companyId);
-        if (optionalCompany.isPresent()) {
-            return optionalCompany.get();
-        }
-        throw new CompanyNotFindException();
+        return companyDao.findById(companyId)
+                .orElseThrow(CompanyNotFindException::new);
     }
 
     public List<Employee> queryEmployeesInCompanyById(String companyId) {

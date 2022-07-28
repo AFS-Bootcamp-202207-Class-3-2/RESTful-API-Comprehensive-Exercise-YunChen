@@ -2,6 +2,7 @@ package com.rest.springbootemployee.services;
 
 import com.rest.springbootemployee.enities.Company;
 import com.rest.springbootemployee.enities.Employee;
+import com.rest.springbootemployee.exception.CompanyNotFindException;
 import com.rest.springbootemployee.mapper.CompaniesRepository;
 import com.rest.springbootemployee.mapper.CompanyDao;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,10 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -21,14 +24,15 @@ import static org.mockito.BDDMockito.given;
 public class CompaniesServiceTest {
     @Mock
     CompaniesRepository companiesRepository;
-    @InjectMocks
-    CompaniesService companiesService;
+//    @Autowired
     @Mock
     CompanyDao companyDao;
+    @InjectMocks
+    CompaniesService companiesService;
+
     @BeforeEach
     void initData() {
-        companiesRepository.setNextId("1");
-        companiesRepository.getCompanies().clear();
+        companyDao.deleteAll();
     }
 
     @Test
@@ -42,7 +46,7 @@ public class CompaniesServiceTest {
         exceptCompanies.add(secondCompany);
         exceptCompanies.add(thirdCompany);
         //when
-        given(companiesRepository.queryAllCompanies()).willReturn(exceptCompanies);
+        given(companyDao.findAll()).willReturn(exceptCompanies);
         //then
         List<Company> companiesFromDb = companiesService.queryAllCompanies();
         assertThat(companiesFromDb).isEqualTo(exceptCompanies);
@@ -51,15 +55,9 @@ public class CompaniesServiceTest {
     @Test
     void should_return_right_company_when_query_by_id_given_company_id()throws Exception {
         //given
-        List<Company> exceptCompanies = new ArrayList<>();
-        Company firstCompany = new Company("1", "ooal", new ArrayList<>());
         Company secondCompany = new Company("1", "oobl", new ArrayList<>());
-        Company thirdCompany = new Company("1", "oocl", new ArrayList<>());
-        exceptCompanies.add(firstCompany);
-        exceptCompanies.add(secondCompany);
-        exceptCompanies.add(thirdCompany);
         //when
-        given(companiesRepository.queryCompanyById("2")).willReturn(secondCompany);
+        given(companyDao.findById("2")).willReturn(Optional.of(secondCompany));
         //then
         Company companyFromDb = companiesService.queryCompanyById("2");
         assertThat(companyFromDb).isEqualTo(secondCompany);

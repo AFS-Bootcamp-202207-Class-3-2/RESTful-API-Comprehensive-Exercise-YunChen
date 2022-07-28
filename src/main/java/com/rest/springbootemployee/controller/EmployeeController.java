@@ -47,11 +47,9 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public String updateAnEmployee(@PathVariable("id") String employeeId,
+    public Employee updateAnEmployee(@PathVariable("id") String employeeId,
                                    @RequestBody Employee employee) {
-        return employeeService.update(employeeId,employee)?
-                Constant.UPDATE_EMPLOYEE_SUCCESS:
-                Constant.EMPLOYEE_IS_NOT_EXIST;
+        return employeeService.update(employeeId,employee);
     }
 
     @DeleteMapping("/{id}")
