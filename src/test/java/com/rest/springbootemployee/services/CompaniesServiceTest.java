@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -97,9 +98,9 @@ public class CompaniesServiceTest {
         PageImpl<Company> companies = new PageImpl<>(exceptCompanies);
         given(companyDao.findAll(PageRequest.of(2,2))).willReturn(companies);
         //when
-//        List<Company> companyEmployeesFromDb = companiesService.queryCompanyPage(2,2);
+        Page<Company> companyPage = companiesService.queryCompanyPage(3, 2);
         //then
-//        assertThat(companyEmployeesFromDb).isEqualTo(exceptCompanies);
+        assertThat(companyPage).isEqualTo(companies);
     }
     @Test
     void should_increase_company_when_insert_company_given_company_msg()throws Exception {
