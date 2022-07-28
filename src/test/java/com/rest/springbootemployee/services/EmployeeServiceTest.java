@@ -11,6 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -130,11 +133,13 @@ public class EmployeeServiceTest {
         exceptionEmployees.add(thirdEmployee);
         exceptionEmployees.add(fourthEmployee);
         int page = 2, pageSize = 2;
-//        given(employeeRepository.findByPage(page, pageSize)).willReturn(exceptionEmployees);
+        PageImpl<Employee> employees = new PageImpl<Employee>(exceptionEmployees);
+        given(employeeDao.findAll(PageRequest.of(page - 1, pageSize))).willReturn(employees);
         //when
-        List<Employee> employeeByPage = employeeService.findEmployeeByPage(page, pageSize).getContent();
+        Page<Employee> employeeByPage = employeeService.findEmployeeByPage(page, pageSize);
         //then
-        assertThat(employeeByPage).contains(thirdEmployee, fourthEmployee);
+        assertThat(employeeByPage).isEqualTo(employees);
+        assertThat(employeeByPage.getContent().get(0)).isEqualTo(thirdEmployee);
     }
 
     @Test
