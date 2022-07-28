@@ -78,8 +78,8 @@ public class CompanyControllerTest {
         //given
         Company firstCompany = new Company("1", "oocl", new ArrayList<>());
         Company secondCompany = new Company("2", "aaal", new ArrayList<>());
-        companiesRepository.insertCompany(firstCompany);
-        companiesRepository.insertCompany(secondCompany);
+        companyDao.saveAndFlush(firstCompany);
+        companyDao.saveAndFlush(secondCompany);
         //when
         client.perform(MockMvcRequestBuilders.get("/companies/{id}","3"))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());

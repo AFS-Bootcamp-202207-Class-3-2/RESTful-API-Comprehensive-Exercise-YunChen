@@ -66,12 +66,14 @@ public class CompaniesServiceTest {
     @Test
     void should_return_company_employees_data_when_query_company_employees_by_company_id_given_company_id()throws Exception {
         //given
+        Company company = new Company("1", "oobl", null);
         List<Employee> prepareEmployees = new ArrayList<>();
         Employee firstEmployee = new Employee("1", "Susan", 23, "Female", 9000, "");
         Employee secondEmployee = new Employee("1", "Mathew", 23, "Female", 12000, "");
         prepareEmployees.add(firstEmployee);
         prepareEmployees.add(secondEmployee);
-        given(companiesRepository.queryEmployeesInCompanyById("1")).willReturn(prepareEmployees);
+        company.setEmployees(prepareEmployees);
+        given(companyDao.findById("1")).willReturn(Optional.of(company));
         //when
         List<Employee> companyEmployeesFromDb = companiesService.queryEmployeesInCompanyById("1");
         //then
