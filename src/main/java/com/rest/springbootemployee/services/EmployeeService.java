@@ -37,7 +37,7 @@ public class EmployeeService {
     }
 
     public Page<Employee> findEmployeeByPage(int page, int pageSize) {
-        return employeeDao.findAll(PageRequest.of(page - 1, pageSize));
+        return employeeDao.findAll(PageRequest.of(page , pageSize));
     }
 
     public Employee insertEmployee(Employee insertEmployee) {

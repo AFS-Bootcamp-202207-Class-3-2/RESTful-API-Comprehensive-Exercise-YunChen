@@ -98,9 +98,9 @@ public class CompaniesServiceTest {
         exceptCompanies.add(thirdCompany);
         exceptCompanies.add(fourthCompany);
         PageImpl<Company> companies = new PageImpl<>(exceptCompanies);
-        given(companyDao.findAll(PageRequest.of(2,2))).willReturn(companies);
+        given(companyDao.findAll(PageRequest.of(1,2))).willReturn(companies);
         //when
-        Page<Company> companyPage = companiesService.queryCompanyPage(3, 2);
+        Page<Company> companyPage = companiesService.queryCompanyPage(1, 2);
         //then
         assertThat(companyPage).isEqualTo(companies);
     }

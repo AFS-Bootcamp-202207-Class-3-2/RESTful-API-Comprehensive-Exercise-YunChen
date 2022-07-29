@@ -36,7 +36,7 @@ public class CompaniesService {
     }
 
     public Page<Company> queryCompanyPage(int page, int pageSize) {
-        return companyDao.findAll(PageRequest.of(page - 1, pageSize));
+        return companyDao.findAll(PageRequest.of(page , pageSize));
     }
 
     public Company insertCompany(Company company) {

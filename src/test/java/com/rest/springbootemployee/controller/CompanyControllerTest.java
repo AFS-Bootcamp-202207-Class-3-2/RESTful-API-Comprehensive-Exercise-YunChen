@@ -104,7 +104,7 @@ public class CompanyControllerTest {
         companyDao.saveAndFlush(fourthCompany);
         //when
         client.perform(MockMvcRequestBuilders.get("/companies")
-                .param("page", "2")
+                .param("page", "1")
                 .param("pageSize", "2"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content", hasSize(2)));
         //then

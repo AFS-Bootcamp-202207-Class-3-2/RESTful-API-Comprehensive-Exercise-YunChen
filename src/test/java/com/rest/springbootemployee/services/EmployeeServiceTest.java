@@ -138,7 +138,7 @@ public class EmployeeServiceTest {
         PageImpl<Employee> employees = new PageImpl<Employee>(exceptionEmployees);
         given(employeeDao.findAll(PageRequest.of(page - 1, pageSize))).willReturn(employees);
         //when
-        Page<Employee> employeeByPage = employeeService.findEmployeeByPage(page, pageSize);
+        Page<Employee> employeeByPage = employeeService.findEmployeeByPage(page - 1, pageSize);
         //then
         assertThat(employeeByPage).isEqualTo(employees);
         assertThat(employeeByPage.getContent().get(0)).isEqualTo(thirdEmployee);
