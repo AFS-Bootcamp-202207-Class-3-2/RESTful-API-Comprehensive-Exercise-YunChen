@@ -4,6 +4,8 @@ import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.exception.EmployeeNotFindException;
 import com.rest.springbootemployee.mapper.EmployeeDao;
 import com.rest.springbootemployee.mapper.EmployeeRepository;
+import com.rest.springbootemployee.utils.EmployeeMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,8 +26,9 @@ public class EmployeeService {
     }
 
     public Employee update(String id, Employee employeeToUpdate) {
-        employeeDao.findById(id).orElseThrow(EmployeeNotFindException::new);
-        return employeeDao.save(employeeToUpdate);
+        Employee employeeFromDb = employeeDao.findById(id).orElseThrow(EmployeeNotFindException::new);
+        EmployeeMapper.toUpdate(employeeToUpdate, employeeFromDb);
+        return employeeDao.save(employeeFromDb);
     }
 
     public List<Employee> queryEmployeeByGender(String gender) {

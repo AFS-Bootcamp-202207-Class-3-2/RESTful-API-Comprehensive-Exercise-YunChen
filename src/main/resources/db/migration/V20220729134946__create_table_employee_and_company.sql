@@ -1,4 +1,4 @@
-
+CREATE DATABASE if not exists `restful` DEFAULT CHARACTER SET UTF8MB3 COLLATE utf8mb3_general_ci;
 CREATE TABLE IF NOT EXISTS `company` (
     `id` varchar(50) NOT NULL DEFAULT '0',
     `create_time` datetime(6) DEFAULT NULL,

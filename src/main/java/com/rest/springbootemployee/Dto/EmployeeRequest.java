@@ -10,5 +10,6 @@ public class EmployeeRequest {
     private Integer age;
     private String gender;
     private Integer salary;
-    private Integer companyId;
+    private String companyId;
+    private String companyName;
 }

@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 public class EmployeePageResponse {
-    private List<Employee> content = new ArrayList<>();
+    private List<EmployeeResponse> content = new ArrayList<>();
     private int totalPages;
     private long totalElements;
     private boolean last;
