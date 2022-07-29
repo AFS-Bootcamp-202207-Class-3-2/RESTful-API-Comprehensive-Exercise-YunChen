@@ -1,15 +1,18 @@
 package com.rest.springbootemployee.controller;
 
 
+import com.rest.springbootemployee.Dto.EmployeeResponse;
 import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.mapper.EmployeeRepository;
 import com.rest.springbootemployee.services.EmployeeService;
 import com.rest.springbootemployee.utils.Constant;
+import com.rest.springbootemployee.utils.EmployeeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -30,8 +33,13 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<Employee> queryAllEmployees() {
-        return employeeService.findALl();
+    public List<EmployeeResponse> queryAllEmployees() {
+        List<Employee> employees = employeeService.findALl();
+        List<EmployeeResponse> returnList = new ArrayList<>();
+        for (int idx = 0; idx < employees.size(); idx++) {
+            returnList.add(EmployeeMapper.toResponse(employees.get(idx)));
+        }
+        return returnList;
     }
 
     @GetMapping(params = {"page", "pageSize"})
