@@ -153,6 +153,8 @@ public class CompanyControllerTest {
         Employee thirdSave = employeeDao.saveAndFlush(thirdEmployee);
         Employee fourthSave = employeeDao.saveAndFlush(fourthEmployee);
         //when
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}/employees",companyFromDb.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(4)));
         List<Employee> employees = companiesService.queryEmployeesInCompanyById(companyFromDb.getId());
         List<String> ids = employees.stream().map((Employee::getId)).collect(Collectors.toList());
         //then
