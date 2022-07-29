@@ -1,6 +1,7 @@
 package com.rest.springbootemployee.controller;
 
 
+import com.rest.springbootemployee.Dto.EmployeePageResponse;
 import com.rest.springbootemployee.Dto.EmployeeResponse;
 import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.mapper.EmployeeRepository;
@@ -9,6 +10,7 @@ import com.rest.springbootemployee.utils.Constant;
 import com.rest.springbootemployee.utils.EmployeeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,13 +25,16 @@ public class EmployeeController {
 
     //companyId:1552582897884463104
     @GetMapping(params = {"gender"})
-    public List<Employee> queryGender(@RequestParam("gender") String gender) {
-        return employeeService.queryEmployeeByGender(gender);
+    public List<EmployeeResponse> queryGender(@RequestParam("gender") String gender) {
+        List<EmployeeResponse> returnList = new ArrayList<>();
+        List<Employee> employees = employeeService.queryEmployeeByGender(gender);
+        employees.forEach(employee -> returnList.add(EmployeeMapper.toResponse(employee)));
+        return returnList;
     }
 
     @GetMapping("/{id}")
-    public Employee queryEmployeeById(@PathVariable String id)   {
-        return employeeService.queryEmployeeById(id);
+    public EmployeeResponse queryEmployeeById(@PathVariable String id)   {
+        return EmployeeMapper.toResponse(employeeService.queryEmployeeById(id));
     }
 
     @GetMapping
@@ -43,9 +48,10 @@ public class EmployeeController {
     }
 
     @GetMapping(params = {"page", "pageSize"})
-    public Page<Employee> findByPage(@RequestParam("page") int page,
-                                     @RequestParam("pageSize") int pageSize) {
-        return employeeService.findEmployeeByPage(page, pageSize);
+    public EmployeePageResponse findByPage(@RequestParam("page") int page,
+                                           @RequestParam("pageSize") int pageSize) {
+        Page<Employee> employeeByPage = employeeService.findEmployeeByPage(page, pageSize);
+        return EmployeeMapper.toResponse(employeeByPage);
     }
 
 
