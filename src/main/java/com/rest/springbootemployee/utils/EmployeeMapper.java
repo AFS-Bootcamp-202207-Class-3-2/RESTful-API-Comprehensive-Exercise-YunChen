@@ -32,11 +32,6 @@ public class EmployeeMapper {
         employeePageResponse.setTotalElements(employeeOfPage.getTotalElements());
         return employeePageResponse;
     }
-    public static EmployeeRequest toEntity(Employee employeeRequest) {
-        EmployeeRequest employeeResponse = new EmployeeRequest();
-        BeanUtils.copyProperties(employeeRequest, employeeResponse);
-        return employeeResponse;
-    }
 
     public static Employee toRequest(EmployeeRequest employeeRequest) {
         Employee employee = new Employee();

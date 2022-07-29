@@ -40,6 +40,12 @@ public class EmployeeService {
     }
 
     public Page<Employee> findEmployeeByPage(int page, int pageSize) {
+        if (page <= 0) {
+            page = 0;
+        }
+        if (pageSize <= 1) {
+            pageSize = 1;
+        }
         return employeeDao.findAll(PageRequest.of(page , pageSize));
     }
 
