@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.MvcResult;
@@ -29,6 +30,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 public class EmployeeControllerTest {
     @Autowired
     MockMvc client;
@@ -200,13 +202,19 @@ public class EmployeeControllerTest {
         addCompanyId(firstEmployee,secondEmployee,thirdEmployee,fourthEmployee);
         employeeDao.save(firstEmployee);
         employeeDao.save(secondEmployee);
-        employeeDao.save(thirdEmployee);
+        Employee save = employeeDao.save(thirdEmployee);
         employeeDao.save(fourthEmployee);
         //when
         client.perform(MockMvcRequestBuilders.get("/employees")
                         .param("page", "1")
                         .param("pageSize", "2"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.content", hasSize(2)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].id").isString())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].name", equalTo("Hang")));
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].age", equalTo(12)))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].gender", equalTo("Female")))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.salary", equalTo(2000)))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.companyName", equalTo("abc")));
         //then
     }
 
