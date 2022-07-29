@@ -57,20 +57,20 @@ public class EmployeeController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Employee addAnEmployee(@RequestBody Employee employee) {
-        return employeeService.insertEmployee(employee);
+    public EmployeeResponse addAnEmployee(@RequestBody Employee employee) {
+        return EmployeeMapper.toResponse(employeeService.insertEmployee(employee));
     }
 
     @PutMapping("/{id}")
-    public Employee updateAnEmployee(@PathVariable("id") String employeeId,
+    public EmployeeResponse updateAnEmployee(@PathVariable("id") String employeeId,
                                    @RequestBody Employee employee) {
-        return employeeService.update(employeeId,employee);
+        return EmployeeMapper.toResponse(employeeService.update(employeeId,employee));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public Employee deleteAnEmployee(@PathVariable String id) {
-        return employeeService.removeEmployee(id);
+    public EmployeeResponse deleteAnEmployee(@PathVariable String id) {
+        return EmployeeMapper.toResponse(employeeService.removeEmployee(id));
     }
 
 }
