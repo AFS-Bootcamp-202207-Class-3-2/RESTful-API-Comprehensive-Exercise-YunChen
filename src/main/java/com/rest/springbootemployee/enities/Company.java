@@ -40,8 +40,7 @@ public class Company {
 
     @Column(name = "companyName")
     private String companyName;
-    @OneToMany(fetch=FetchType.EAGER)
-//    @OneToMany(targetEntity=Employee.class,mappedBy = "companyName",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    @OneToMany
     @JoinColumn(name="companyId",referencedColumnName = "id")
     private List<Employee> employees = new ArrayList<>();
 

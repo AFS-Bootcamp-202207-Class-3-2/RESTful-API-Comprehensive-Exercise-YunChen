@@ -56,8 +56,8 @@ public class CompanyControllerTest {
     @Test
     void should_return_all_companies_when_query_all_companies_given_query() throws Exception {
         //given
-        Company firstCompany = new Company("1", "oocl", new ArrayList<>());
-        Company secondCompany = new Company("1", "oocl", new ArrayList<>());
+        Company firstCompany = new Company("", "oocl", null);
+        Company secondCompany = new Company("", "oocl", null);
         companyDao.saveAndFlush(firstCompany);
         companyDao.saveAndFlush(secondCompany);
         //when
@@ -83,8 +83,8 @@ public class CompanyControllerTest {
     @Test
     void should_return_not_find_message_when_query_by_id_given_company_id() throws Exception {
         //given
-        Company firstCompany = new Company("1", "oocl", new ArrayList<>());
-        Company secondCompany = new Company("2", "aaal", new ArrayList<>());
+        Company firstCompany = new Company("", "oocl", new ArrayList<>());
+        Company secondCompany = new Company("", "aaal", new ArrayList<>());
         companyDao.saveAndFlush(firstCompany);
         companyDao.saveAndFlush(secondCompany);
         //when
@@ -96,10 +96,10 @@ public class CompanyControllerTest {
     @Test
     void should_return_last_twice_companies_when_query_company_by_page_given_page_and_page_size()throws Exception {
         //given
-        Company firstCompany = new Company("1", "oocl", new ArrayList<>());
-        Company secondCompany = new Company("2", "aaal", new ArrayList<>());
-        Company thirdCompany = new Company("3", "abc", new ArrayList<>());
-        Company fourthCompany = new Company("4", "ddd", new ArrayList<>());
+        Company firstCompany = new Company("", "oocl", new ArrayList<>());
+        Company secondCompany = new Company("", "aaal", new ArrayList<>());
+        Company thirdCompany = new Company("", "abc", new ArrayList<>());
+        Company fourthCompany = new Company("", "ddd", new ArrayList<>());
         companyDao.saveAndFlush(firstCompany);
         companyDao.saveAndFlush(secondCompany);
         companyDao.saveAndFlush(thirdCompany);
@@ -115,12 +115,8 @@ public class CompanyControllerTest {
 
     @Test
     void should_return_insert_company_msg_when_insert_company_given_company()throws Exception {
-
         String jsonCompany = "{\n" +
-                "    \"id\": \"1\",\n" +
-                "    \"companyName\": \"spring\",\n" +
-                "    \"employees\": [ "+
-                "    ]\n" +
+                "    \"companyName\": \"spring\"\n" +
                 "  }";
         //given
         Company firstCompany = new Company("1", "oocl", new ArrayList<>());
@@ -138,8 +134,8 @@ public class CompanyControllerTest {
     @Test
     public void should_return_company_employees_when_query_employees_by_companyee_id_given_company_id()throws Exception {
         //given
-        Company firstCompany = new Company("1", "oocl", new ArrayList<>());
-        Company secondCompany = new Company("2", "aaal", new ArrayList<>());
+        Company firstCompany = new Company("", "oocl", new ArrayList<>());
+        Company secondCompany = new Company("", "aaal", new ArrayList<>());
         Company companyFromDb = companyDao.saveAndFlush(firstCompany);
         companyDao.saveAndFlush(secondCompany);
         Employee firstEmployee = new Employee("", "YunChen", 18, "male", 18000, companyFromDb.getCompanyName());
@@ -155,13 +151,14 @@ public class CompanyControllerTest {
         Employee thirdSave = employeeDao.saveAndFlush(thirdEmployee);
         Employee fourthSave = employeeDao.saveAndFlush(fourthEmployee);
         //when
-        client.perform(MockMvcRequestBuilders.get("/companies/{id}/employees",companyFromDb.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(4)));
-        List<Employee> employees = companiesService.queryEmployeesInCompanyById(companyFromDb.getId());
-        List<String> ids = employees.stream().map((Employee::getId)).collect(Collectors.toList());
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}/employees", companyFromDb.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(4)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[*].id", contains(
+                        firstSave.getId(),
+                        secondSave.getId(),
+                        thirdSave.getId(),
+                        fourthSave.getId())));
         //then
-        System.out.println(employees.size());
-        assertThat(ids).contains(firstSave.getId(),secondSave.getId(),thirdSave.getId(),fourthSave.getId());
     }
 
     void saveBatchEmployees(Employee... employees) {

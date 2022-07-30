@@ -35,7 +35,7 @@ public class CompaniesService {
         Company company = companyDao.findById(companyId).orElseThrow(CompanyNotFindException::new);
         return company.getEmployees();
     }
-
+@Transactional
     public Page<Company> queryCompanyPage(int page, int pageSize) {
         return companyDao.findAll(PageRequest.of(page , pageSize));
     }
