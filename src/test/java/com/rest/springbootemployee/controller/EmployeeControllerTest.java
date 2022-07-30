@@ -215,10 +215,10 @@ public class EmployeeControllerTest {
     @Test
     void should_increase_employee_number_when_delete_exist_employee_given_delete_id() throws Exception {
         //given
-        Employee firstEmployee = new Employee("1", "Sarah", 12, "Female", 42000, "abc");
-        Employee secondEmployee = new Employee("1", "Mathew", 12, "Female", 22000, "abc");
-        Employee thirdEmployee = new Employee("1", "Hang", 12, "Female", 12000, "abc");
-        Employee fourthEmployee = new Employee("1", "Done", 12, "Female", 2000, "abc");
+        Employee firstEmployee = new Employee("", "Sarah", 12, "Female", 42000, companyFromDb.getCompanyName());
+        Employee secondEmployee = new Employee("", "Mathew", 12, "Female", 22000, companyFromDb.getCompanyName());
+        Employee thirdEmployee = new Employee("", "Hang", 12, "Female", 12000, companyFromDb.getCompanyName());
+        Employee fourthEmployee = new Employee("", "Done", 12, "Female", 2000, companyFromDb.getCompanyName());
         addCompanyId(firstEmployee,secondEmployee,thirdEmployee,fourthEmployee);
         employeeDao.save(firstEmployee);
         Employee saveSecondEmployee = employeeDao.save(secondEmployee);
@@ -234,17 +234,16 @@ public class EmployeeControllerTest {
     @Test
     void should_update_salay_50000_when_update_employee_given_id_and_update_message() throws Exception {
         //given
-        Employee firstEmployee = new Employee("1", "Sarah", 12, "Female", 42000, "abc");
-        Employee secondEmployee = new Employee("2", "Mathew", 12, "Female", 22000, "abc");
-        Employee thirdEmployee = new Employee("1", "Hang", 12, "Female", 12000, "abc");
-        Employee fourthEmployee = new Employee("1", "Done", 12, "Female", 2000, "abc");
+        Employee firstEmployee = new Employee("1", "Sarah", 12, "Female", 42000, companyFromDb.getCompanyName());
+        Employee secondEmployee = new Employee("2", "Mathew", 12, "Female", 22000, companyFromDb.getCompanyName());
+        Employee thirdEmployee = new Employee("1", "Hang", 12, "Female", 12000, companyFromDb.getCompanyName());
+        Employee fourthEmployee = new Employee("1", "Done", 12, "Female", 2000, companyFromDb.getCompanyName());
         addCompanyId(firstEmployee,secondEmployee,thirdEmployee,fourthEmployee);
         employeeDao.save(firstEmployee);
         Employee saveSecondEmployee = employeeDao.save(secondEmployee);
         employeeDao.save(thirdEmployee);
         employeeDao.save(fourthEmployee);
         String updateEmployeeMsg = "{\n" +
-                "    \"id\": \"" + saveSecondEmployee.getId() + "\",\n" +
                 "    \"name\": \"Mathew\",\n" +
                 "    \"age\": 12,\n" +
                 "    \"gender\": \"Female\",\n" +
@@ -257,9 +256,8 @@ public class EmployeeControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(updateEmployeeMsg));
         //then
-        client.perform(MockMvcRequestBuilders.get("/employees/{id}",saveSecondEmployee.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isString())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.salary",equalTo(50000)));
+        Employee employee = employeeDao.findById(saveSecondEmployee.getId()).get();
+        assertThat(employee.getSalary(),equalTo(50000));
     }
 
 
