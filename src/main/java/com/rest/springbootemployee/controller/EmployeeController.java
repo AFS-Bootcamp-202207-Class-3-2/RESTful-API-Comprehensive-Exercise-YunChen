@@ -34,19 +34,13 @@ public class EmployeeController {
 
     @GetMapping
     public List<EmployeeResponse> queryAllEmployees() {
-        List<Employee> employees = employeeService.findALl();
-        List<EmployeeResponse> returnList = new ArrayList<>();
-        for (int idx = 0; idx < employees.size(); idx++) {
-            returnList.add(EmployeeMapper.toResponse(employees.get(idx)));
-        }
-        return returnList;
+        return EmployeeMapper.toResponse(employeeService.findALl());
     }
 
     @GetMapping(params = {"page", "pageSize"})
     public EmployeePageResponse findByPage(@RequestParam("page") int page,
                                            @RequestParam("pageSize") int pageSize) {
-        Page<Employee> employeeByPage = employeeService.findEmployeeByPage(page, pageSize);
-        return EmployeeMapper.toResponse(employeeByPage);
+        return EmployeeMapper.toResponse(employeeService.findEmployeeByPage(page, pageSize));
     }
 
 
