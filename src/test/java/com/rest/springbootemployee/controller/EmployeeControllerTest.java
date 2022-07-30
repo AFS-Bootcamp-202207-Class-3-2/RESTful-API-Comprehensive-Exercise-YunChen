@@ -1,11 +1,13 @@
 package com.rest.springbootemployee.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.rest.springbootemployee.enities.Company;
 import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.mapper.CompanyDao;
 import com.rest.springbootemployee.mapper.EmployeeDao;
 import com.rest.springbootemployee.mapper.EmployeeRepository;
 import com.rest.springbootemployee.services.EmployeeService;
+import com.rest.springbootemployee.utils.EmployeeMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -190,26 +191,23 @@ public class EmployeeControllerTest {
     @Test
     void should_return_third_fourth_employee_when_find_by_page_given_page_2_page_size_2() throws Exception {
         //given
-        Employee firstEmployee = new Employee("1", "Sarah", 12, "Female", 42000, "abc");
-        Employee secondEmployee = new Employee("1", "Mathew", 12, "Female", 22000, "abc");
-        Employee thirdEmployee = new Employee("1", "Hang", 12, "Female", 12000, "abc");
-        Employee fourthEmployee = new Employee("1", "Done", 12, "Female", 2000, "abc");
+        Employee firstEmployee = new Employee("1", "Sarah", 12, "Female", 42000, companyFromDb.getCompanyName());
+        Employee secondEmployee = new Employee("1", "Mathew", 12, "Female", 22000, companyFromDb.getCompanyName());
+        Employee thirdEmployee = new Employee("1", "Hang", 12, "Female", 12000, companyFromDb.getCompanyName());
+        Employee fourthEmployee = new Employee("1", "Done", 12, "Female", 2000, companyFromDb.getCompanyName());
         addCompanyId(firstEmployee,secondEmployee,thirdEmployee,fourthEmployee);
         employeeDao.save(firstEmployee);
         employeeDao.save(secondEmployee);
         Employee save = employeeDao.save(thirdEmployee);
-        employeeDao.save(fourthEmployee);
+        Employee secondSave = employeeDao.save(fourthEmployee);
         //when
         client.perform(MockMvcRequestBuilders.get("/employees")
                         .param("page", "1")
                         .param("pageSize", "2"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content", hasSize(2)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].id").isString())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].name", equalTo("Hang")));
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].age", equalTo(12)))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].gender", equalTo("Female")))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.salary", equalTo(2000)))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.companyName", equalTo("abc")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content[*].name", contains(
+                       save.getName(),secondSave.getName())));
         //then
     }
 
