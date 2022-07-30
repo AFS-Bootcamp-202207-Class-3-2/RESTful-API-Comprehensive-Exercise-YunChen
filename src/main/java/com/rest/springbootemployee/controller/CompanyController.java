@@ -1,15 +1,14 @@
 package com.rest.springbootemployee.controller;
 
-import com.rest.springbootemployee.Dto.*;
+import com.rest.springbootemployee.Dto.CompanyRequest;
+import com.rest.springbootemployee.Dto.CompanyResponse;
+import com.rest.springbootemployee.Dto.EmployeeResponse;
+import com.rest.springbootemployee.Dto.PageResponse;
 import com.rest.springbootemployee.enities.Company;
 import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.services.CompaniesService;
-import com.rest.springbootemployee.utils.CompanyMapper;
-import com.rest.springbootemployee.utils.Constant;
-import com.rest.springbootemployee.utils.EmployeeMapper;
 import com.rest.springbootemployee.utils.MapperDtoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,9 +62,8 @@ public class CompanyController {
     @PutMapping("/{id}")
     public CompanyResponse updateCompany(@PathVariable("id") String companyId,
                                          @RequestBody CompanyRequest companyRequest) throws IllegalAccessException, NoSuchFieldException, InstantiationException {
-
         return MapperDtoUtil.<CompanyResponse, Company>toResponse(
-                companiesService.updateCompany(companyId, CompanyMapper.toRequest(companyRequest)),
+                companiesService.updateCompany(companyId,MapperDtoUtil.<Company,CompanyRequest>toRequest(companyRequest,Company.class)),
                 CompanyResponse.class
         );
     }

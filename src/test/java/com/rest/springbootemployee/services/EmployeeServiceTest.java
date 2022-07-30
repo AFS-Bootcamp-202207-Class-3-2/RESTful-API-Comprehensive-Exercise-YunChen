@@ -48,7 +48,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    void should_update_only_age_and_salary_when_update_given_employee() {
+    void should_update_only_age_and_salary_when_update_given_employee() throws NoSuchFieldException, IllegalAccessException {
     //given
         Employee employeeToUpdate = new Employee("1", "Susan", 20, "Female", 8000, "");
         Employee employeeInUpdateRequest = new Employee("1", "Mathew", 10, "male", 21000, "");

@@ -1,19 +1,16 @@
 package com.rest.springbootemployee.controller;
 
 
-import com.rest.springbootemployee.Dto.EmployeePageResponse;
 import com.rest.springbootemployee.Dto.EmployeeRequest;
 import com.rest.springbootemployee.Dto.EmployeeResponse;
+import com.rest.springbootemployee.Dto.PageResponse;
 import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.services.EmployeeService;
-import com.rest.springbootemployee.utils.EmployeeMapper;
 import com.rest.springbootemployee.utils.MapperDtoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -34,33 +31,31 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<EmployeeResponse> queryAllEmployees() {
-        List<Employee> employees = employeeService.findALl();
-        List<EmployeeResponse> returnList = new ArrayList<>();
-        for (int idx = 0; idx < employees.size(); idx++) {
-            returnList.add(EmployeeMapper.toResponse(employees.get(idx)));
-        }
-        return returnList;
+    public List<EmployeeResponse> queryAllEmployees() throws IllegalAccessException, NoSuchFieldException, InstantiationException {
+        return MapperDtoUtil.<EmployeeResponse, Employee>toResponse(employeeService.findALl(), EmployeeResponse.class);
     }
 
     @GetMapping(params = {"page", "pageSize"})
-    public EmployeePageResponse findByPage(@RequestParam("page") int page,
-                                           @RequestParam("pageSize") int pageSize) {
-        Page<Employee> employeeByPage = employeeService.findEmployeeByPage(page, pageSize);
-        return EmployeeMapper.toResponse(employeeByPage);
+    public PageResponse<Employee> findByPage(@RequestParam("page") int page,
+                                   @RequestParam("pageSize") int pageSize) throws IllegalAccessException, NoSuchFieldException, InstantiationException {
+        return MapperDtoUtil.<Employee>toResponse(employeeService.findEmployeeByPage(page, pageSize), Employee.class);
     }
 
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public EmployeeResponse addAnEmployee(@RequestBody EmployeeRequest employee) {
-        return EmployeeMapper.toResponse(employeeService.insertEmployee(EmployeeMapper.toRequest(employee)));
+    public EmployeeResponse addAnEmployee(@RequestBody EmployeeRequest employee) throws InstantiationException, IllegalAccessException, NoSuchFieldException {
+        return MapperDtoUtil.<EmployeeResponse, Employee>toResponse(employeeService.insertEmployee(
+                MapperDtoUtil.toRequest(employee, Employee.class)
+        ), EmployeeResponse.class);
     }
 
     @PutMapping("/{id}")
     public EmployeeResponse updateAnEmployee(@PathVariable("id") String employeeId,
-                                   @RequestBody EmployeeRequest employee) {
-        return EmployeeMapper.toResponse(employeeService.update(employeeId,EmployeeMapper.toRequest(employee)));
+                                   @RequestBody EmployeeRequest employee) throws InstantiationException, IllegalAccessException, NoSuchFieldException {
+        return MapperDtoUtil.<EmployeeResponse, Employee>toResponse(employeeService.update(employeeId,
+                MapperDtoUtil.toRequest(employee, Employee.class)),
+                EmployeeResponse.class);
     }
 
     @DeleteMapping("/{id}")

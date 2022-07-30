@@ -1,9 +1,10 @@
 package com.rest.springbootemployee.services;
 
+import com.rest.springbootemployee.Dto.EmployeeRequest;
 import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.exception.EmployeeNotFindException;
 import com.rest.springbootemployee.mapper.EmployeeDao;
-import com.rest.springbootemployee.utils.EmployeeMapper;
+import com.rest.springbootemployee.utils.MapperDtoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,9 +21,11 @@ public class EmployeeService {
         return employeeDao.findAll();
     }
 
-    public Employee update(String id, Employee employeeToUpdate) {
+    public Employee update(String id, Employee employeeToUpdate) throws NoSuchFieldException, IllegalAccessException {
         Employee employeeFromDb = employeeDao.findById(id).orElseThrow(EmployeeNotFindException::new);
-        return employeeDao.save(EmployeeMapper.toUpdate(employeeToUpdate, employeeFromDb));
+        return employeeDao.save(
+                MapperDtoUtil.<Employee, EmployeeRequest>toUpdate(employeeToUpdate, employeeFromDb, EmployeeRequest.class)
+        );
     }
 
     public List<Employee> queryEmployeeByGender(String gender) {
