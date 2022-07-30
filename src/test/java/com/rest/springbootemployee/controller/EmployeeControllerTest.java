@@ -162,12 +162,12 @@ public class EmployeeControllerTest {
     void should_return_employee_when_query_by_id_given_employee_id() throws Exception {
         //given
         Employee employee = new Employee(
-                "1",
+                "",
                 "Sarah",
                 12,
                 "Female",
                 2000,
-                "abc"
+                companyFromDb.getCompanyName()
         );
         employee.setCompanyId(companyFromDb.getId());
         Employee saveEmployeeFromDb = employeeDao.save(employee);
@@ -177,8 +177,7 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name", equalTo("Sarah")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.age", equalTo(12)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.gender", equalTo("Female")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.salary", equalTo(2000)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.companyName", equalTo("abc")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.companyName", equalTo(companyFromDb.getCompanyName())));
         //then
     }
 
