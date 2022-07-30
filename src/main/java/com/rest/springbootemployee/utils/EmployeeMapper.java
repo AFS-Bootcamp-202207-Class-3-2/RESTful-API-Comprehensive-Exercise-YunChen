@@ -12,6 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeMapper {
+    public static List<EmployeeResponse> toResponse(List<Employee> employeeList) {
+        List<EmployeeResponse> employeeResponseList = new ArrayList<>();
+        for (int idx = 0; idx < employeeList.size(); idx++) {
+            employeeResponseList.add(toResponse(employeeList.get(idx)));
+        }
+        return employeeResponseList;
+    }
     public static EmployeeResponse toResponse(Employee employee) {
         EmployeeResponse employeeResponse = new EmployeeResponse();
         BeanUtils.copyProperties(employee, employeeResponse);

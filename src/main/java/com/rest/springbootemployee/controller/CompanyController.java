@@ -1,9 +1,13 @@
 package com.rest.springbootemployee.controller;
 
+import com.rest.springbootemployee.Dto.CompanyResponse;
+import com.rest.springbootemployee.Dto.EmployeeResponse;
 import com.rest.springbootemployee.enities.Company;
 import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.services.CompaniesService;
+import com.rest.springbootemployee.utils.CompanyMapper;
 import com.rest.springbootemployee.utils.Constant;
+import com.rest.springbootemployee.utils.EmployeeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -19,18 +23,18 @@ public class CompanyController {
     private CompaniesService companiesService;
 
     @GetMapping
-    public List<Company> queryAllCompanies() {
-        return companiesService.queryAllCompanies();
+    public List<CompanyResponse> queryAllCompanies() {
+        return CompanyMapper.toResponse(companiesService.queryAllCompanies());
     }
 
     @GetMapping("/{id}")
-    public Company queryCompanyById(@PathVariable String id) {
-        return companiesService.queryCompanyById(id);
+    public CompanyResponse queryCompanyById(@PathVariable String id) {
+        return CompanyMapper.toResponse(companiesService.queryCompanyById(id));
     }
 
     @GetMapping("/{id}/employees")
-    public List<Employee> queryEmployeesInCompanyById(@PathVariable String id) {
-        return companiesService.queryEmployeesInCompanyById(id);
+    public List<EmployeeResponse> queryEmployeesInCompanyById(@PathVariable String id) {
+        return EmployeeMapper.toResponse(companiesService.queryEmployeesInCompanyById(id));
     }
 
     @GetMapping(params = {"page", "pageSize"})

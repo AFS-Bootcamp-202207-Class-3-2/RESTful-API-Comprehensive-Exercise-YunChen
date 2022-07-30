@@ -10,6 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CompanyMapper {
+    public static List<CompanyResponse> toResponse(List<Company> companyList) {
+        List<CompanyResponse> returnList = new ArrayList<>();
+        for (int idx = 0; idx < companyList.size(); idx++) {
+            returnList.add(toResponse(companyList.get(idx)));
+        }
+        return returnList;
+    }
 
     public static CompanyResponse toResponse(Company company) {
         CompanyResponse companyResponse = new CompanyResponse();
