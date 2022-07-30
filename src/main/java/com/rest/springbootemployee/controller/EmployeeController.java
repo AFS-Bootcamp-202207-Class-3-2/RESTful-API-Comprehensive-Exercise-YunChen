@@ -24,10 +24,7 @@ public class EmployeeController {
     //companyId:1552582897884463104
     @GetMapping(params = {"gender"})
     public List<EmployeeResponse> queryGender(@RequestParam("gender") String gender) {
-        List<EmployeeResponse> returnList = new ArrayList<>();
-        List<Employee> employees = employeeService.queryEmployeeByGender(gender);
-        employees.forEach(employee -> returnList.add(EmployeeMapper.toResponse(employee)));
-        return returnList;
+        return EmployeeMapper.toResponse(employeeService.queryEmployeeByGender(gender));
     }
 
     @GetMapping("/{id}")
