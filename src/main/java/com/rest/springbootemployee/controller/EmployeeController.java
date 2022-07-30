@@ -7,6 +7,7 @@ import com.rest.springbootemployee.Dto.EmployeeResponse;
 import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.services.EmployeeService;
 import com.rest.springbootemployee.utils.EmployeeMapper;
+import com.rest.springbootemployee.utils.MapperDtoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -23,11 +24,24 @@ public class EmployeeController {
 
     //companyId:1552582897884463104
     @GetMapping(params = {"gender"})
-    public List<EmployeeResponse> queryGender(@RequestParam("gender") String gender) {
+    public List<EmployeeResponse> queryGender(@RequestParam("gender") String gender) throws IllegalAccessException, NoSuchFieldException, InstantiationException {
         List<EmployeeResponse> returnList = new ArrayList<>();
         List<Employee> employees = employeeService.queryEmployeeByGender(gender);
-        employees.forEach(employee -> returnList.add(EmployeeMapper.toResponse(employee)));
-        return returnList;
+        return MapperDtoUtil.<EmployeeResponse, Employee>toResponse(employees, EmployeeResponse.class);
+//        employees.forEach(employee -> {
+//            try {
+//                returnList.add(
+//                        MapperDtoUtil.<EmployeeResponse, Employee>toResponse(employee, EmployeeResponse.class)
+//                );
+//            } catch (IllegalAccessException e) {
+//                e.printStackTrace();
+//            } catch (InstantiationException e) {
+//                e.printStackTrace();
+//            } catch (NoSuchFieldException e) {
+//                e.printStackTrace();
+//            }
+//        });
+//        return returnList;
     }
 
     @GetMapping("/{id}")
