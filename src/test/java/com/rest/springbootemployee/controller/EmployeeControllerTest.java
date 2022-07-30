@@ -129,7 +129,7 @@ public class EmployeeControllerTest {
                 "    \"age\": 20,\n" +
                 "    \"gender\": \"Female\",\n" +
                 "    \"salary\": 8000,\n" +
-                "    \"companyName\": \"oocl\",\n" +
+                "    \"companyName\": \""+companyFromDb.getCompanyName()+"\",\n" +
                 "    \"companyId\": \""+companyFromDb.getId()+"\"\n" +
                 "  }";
         String maleEmployee = "{\n" +
@@ -138,7 +138,7 @@ public class EmployeeControllerTest {
                 "    \"age\": 20,\n" +
                 "    \"gender\": \"male\",\n" +
                 "    \"salary\": 8000,\n" +
-                "    \"companyName\": \"oocl\",\n" +
+                "    \"companyName\": \""+companyFromDb.getCompanyName()+"\",\n" +
                 "    \"companyId\": \""+companyFromDb.getId()+"\"\n" +
                 "  }";
         client.perform(MockMvcRequestBuilders.post("/employees")
@@ -154,8 +154,7 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", equalTo("John")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].gender", equalTo("male")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].age", equalTo(20)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].salary", equalTo(8000)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].companyName", equalTo("oocl")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].companyName", equalTo(companyFromDb.getCompanyName())));
         //then
     }
 
