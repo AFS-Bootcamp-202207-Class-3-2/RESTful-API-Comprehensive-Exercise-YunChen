@@ -10,7 +10,6 @@ import com.rest.springbootemployee.services.CompaniesService;
 import com.rest.springbootemployee.utils.CompanyMapper;
 import com.rest.springbootemployee.utils.Constant;
 import com.rest.springbootemployee.utils.EmployeeMapper;
-import com.rest.springbootemployee.utils.MapperDtoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -27,10 +26,8 @@ public class CompanyController {
     private CompaniesService companiesService;
 
     @GetMapping
-    public List<CompanyResponse> queryAllCompanies() throws InstantiationException, IllegalAccessException, NoSuchFieldException {
-        return MapperDtoUtil.<CompanyResponse, Company>toResponse(
-                companiesService.queryAllCompanies()
-                , CompanyResponse.class);
+    public List<CompanyResponse> queryAllCompanies() {
+        return CompanyMapper.toResponse(companiesService.queryAllCompanies());
     }
 
     @GetMapping("/{id}")
@@ -67,6 +64,6 @@ public class CompanyController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCompanyById(@PathVariable("id") String companyId) {
-         companiesService.deleteCompanyById(companyId);
+        companiesService.deleteCompanyById(companyId);
     }
 }
