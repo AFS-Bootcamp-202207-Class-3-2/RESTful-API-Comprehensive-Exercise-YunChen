@@ -1,6 +1,10 @@
 package com.rest.springbootemployee.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.rest.springbootemployee.Dto.CompanyRequest;
+import com.rest.springbootemployee.Dto.CompanyResponse;
 import com.rest.springbootemployee.Dto.PageResponse;
+import com.rest.springbootemployee.enities.Company;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 
@@ -39,25 +43,10 @@ public class MapperDtoUtil {
      */
     public static <T,E> T toResponse (E origin,Class<T> response) throws IllegalAccessException, InstantiationException, NoSuchFieldException {
         T targetObject = (T)response.newInstance();
-        List<String> fieldsName = new ArrayList<>();
-        Field[] declaredFields = response.getDeclaredFields();
-
-        Field[] fields = origin.getClass().getDeclaredFields();
-        for (int idx = 0; idx < declaredFields.length; idx++) {
-            String name = declaredFields[idx].getName();
-            for (int subIdx = 0; subIdx < fields.length; subIdx++) {
-                String findEqualsName = fields[subIdx].getName();
-                if (findEqualsName.equals(name)) {
-                    declaredFields[idx].setAccessible(true);
-                    Field originField = origin.getClass().getDeclaredField(name);
-                    originField.setAccessible(true);
-                    declaredFields[idx].set(targetObject,originField.get(origin));
-                    break;
-                }
-            }
-        }
+        BeanUtils.copyProperties(origin,targetObject);
         return targetObject;
     }
+
     public static <E> PageResponse<E> toResponse(Page<E> dataOfPage, Class<E> targetClass) throws IllegalAccessException, InstantiationException, NoSuchFieldException {
         PageResponse<E> pageResponse = new PageResponse<>();
         List<E> content = dataOfPage.getContent();
