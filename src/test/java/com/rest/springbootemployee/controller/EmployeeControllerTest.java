@@ -74,7 +74,7 @@ public class EmployeeControllerTest {
     @Test
     void should_get_all_employees_when_perform_get_given_employees() throws Exception {
         //given
-        Employee employee = new Employee("6", "Salay", 22, "Female", 10000, "");
+        Employee employee = new Employee("", "Salay", 22, "Female", 10000, "");
         employee.setCompanyId(companyFromDb.getId());
         Employee employeeFromDb = employeeDao.save(employee);
         //when
@@ -84,9 +84,7 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isString())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Salay"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].age").value(22))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].gender").value("Female"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].salary").value(10000))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].companyName").value(""));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].gender").value("Female"));
         //then
     }
 
@@ -99,7 +97,7 @@ public class EmployeeControllerTest {
                 "    \"age\": 20,\n" +
                 "    \"gender\": \"Female\",\n" +
                 "    \"salary\": 8000,\n" +
-                "    \"companyName\": \"oocl\",\n" +
+                "    \"companyName\": \""+companyFromDb.getCompanyName()+"\",\n" +
                 "    \"company_id\": \""+companyFromDb.getId()+"\"\n" +
                 "  }";
         //when
@@ -110,15 +108,14 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Lily"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(20))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("Female"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.companyName").value("oocl"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(8000));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.companyName").value(companyFromDb.getCompanyName()));
         //then
         List<Employee> allEmployees = employeeService.findALl();
         assertThat(allEmployees, hasSize(1));
         assertThat(allEmployees.get(0).getName(), equalTo("Lily"));
         assertThat(allEmployees.get(0).getAge(), equalTo(20));
         assertThat(allEmployees.get(0).getGender(), equalTo("Female"));
-        assertThat(allEmployees.get(0).getCompanyName(), equalTo("oocl"));
+        assertThat(allEmployees.get(0).getCompanyName(), equalTo(companyFromDb.getCompanyName()));
         assertThat(allEmployees.get(0).getSalary(), equalTo(8000));
     }
 

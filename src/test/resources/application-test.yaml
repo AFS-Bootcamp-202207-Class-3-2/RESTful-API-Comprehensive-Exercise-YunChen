@@ -2,7 +2,7 @@ spring:
 #  profiles:
 #    active: test
   datasource:
-    url: jdbc:h2:mem:testdb; # use in memory db
+    url: jdbc:h2:mem:restfulTest; # use in memory db
     driverClassName: org.h2.Driver
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
@@ -14,3 +14,5 @@ spring:
   config:
     activate:
       on-profile: test
+  flyway:
+    enabled: false
