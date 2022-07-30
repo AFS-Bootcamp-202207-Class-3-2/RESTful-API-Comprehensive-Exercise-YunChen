@@ -27,8 +27,7 @@ public class EmployeeService {
 
     public Employee update(String id, Employee employeeToUpdate) {
         Employee employeeFromDb = employeeDao.findById(id).orElseThrow(EmployeeNotFindException::new);
-        EmployeeMapper.toUpdate(employeeToUpdate, employeeFromDb);
-        return employeeDao.save(employeeFromDb);
+        return employeeDao.save(EmployeeMapper.toUpdate(employeeToUpdate, employeeFromDb));
     }
 
     public List<Employee> queryEmployeeByGender(String gender) {

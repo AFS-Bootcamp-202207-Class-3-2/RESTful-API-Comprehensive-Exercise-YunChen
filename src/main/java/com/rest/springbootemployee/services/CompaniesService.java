@@ -5,6 +5,7 @@ import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.exception.CompanyNotFindException;
 import com.rest.springbootemployee.mapper.CompaniesRepository;
 import com.rest.springbootemployee.mapper.CompanyDao;
+import com.rest.springbootemployee.utils.CompanyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,8 +47,7 @@ public class CompaniesService {
 
     public Company updateCompany(String id,Company company) {
         Company companyFromDb = companyDao.findById(id).orElseThrow(CompanyNotFindException::new);
-        company.setId(companyFromDb.getId());
-        return companyDao.save(company);
+        return companyDao.save(CompanyMapper.toUpdate(company, companyFromDb));
     }
 
     public Company deleteCompanyById(String id) {

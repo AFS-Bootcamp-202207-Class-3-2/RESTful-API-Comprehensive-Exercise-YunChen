@@ -70,8 +70,8 @@ public class EmployeeController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public EmployeeResponse deleteAnEmployee(@PathVariable String id) {
-        return EmployeeMapper.toResponse(employeeService.removeEmployee(id));
+    public void deleteAnEmployee(@PathVariable String id) {
+        employeeService.removeEmployee(id);
     }
 
 }
