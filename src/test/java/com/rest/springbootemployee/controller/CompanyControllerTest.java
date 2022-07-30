@@ -170,10 +170,7 @@ public class CompanyControllerTest {
     @Test
     void should_change_name_of_company_when_update_given_update_msg()throws Exception {
         String jsonCompany = "{\n" +
-                "    \"id\": \"1\",\n" +
-                "    \"companyName\": \"spring\",\n" +
-                "    \"employees\": [" +
-                "    ]\n" +
+                "    \"companyName\": \"spring\"\n" +
                 "  }";
         //given
         Company firstCompany = new Company("1", "oocl", new ArrayList<>());
