@@ -3,9 +3,7 @@ package com.rest.springbootemployee.services;
 import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.exception.EmployeeNotFindException;
 import com.rest.springbootemployee.mapper.EmployeeDao;
-import com.rest.springbootemployee.mapper.EmployeeRepository;
 import com.rest.springbootemployee.utils.EmployeeMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,9 +13,6 @@ import java.util.List;
 
 @Service
 public class EmployeeService {
-    @Autowired
-    EmployeeRepository employeeRepository;
-
     @Autowired
     EmployeeDao employeeDao;
 

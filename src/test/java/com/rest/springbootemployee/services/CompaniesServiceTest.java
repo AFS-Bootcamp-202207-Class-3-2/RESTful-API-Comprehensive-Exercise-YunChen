@@ -2,15 +2,12 @@ package com.rest.springbootemployee.services;
 
 import com.rest.springbootemployee.enities.Company;
 import com.rest.springbootemployee.enities.Employee;
-import com.rest.springbootemployee.exception.CompanyNotFindException;
-import com.rest.springbootemployee.mapper.CompaniesRepository;
 import com.rest.springbootemployee.mapper.CompanyDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -27,9 +24,6 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 public class CompaniesServiceTest {
-    @Mock
-    CompaniesRepository companiesRepository;
-//    @Autowired
     @Mock
     CompanyDao companyDao;
     @InjectMocks
@@ -126,7 +120,6 @@ public class CompaniesServiceTest {
         //then
         assertThat(updateCompany).isEqualTo(firstCompany);
     }
-
     @Test
     void should_get_true_when_delete_company_given_company_id()throws Exception {
         //given

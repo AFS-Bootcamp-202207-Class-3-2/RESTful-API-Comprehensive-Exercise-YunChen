@@ -1,13 +1,10 @@
 package com.rest.springbootemployee.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.rest.springbootemployee.enities.Company;
 import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.mapper.CompanyDao;
 import com.rest.springbootemployee.mapper.EmployeeDao;
-import com.rest.springbootemployee.mapper.EmployeeRepository;
 import com.rest.springbootemployee.services.EmployeeService;
-import com.rest.springbootemployee.utils.EmployeeMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -35,7 +27,6 @@ import static org.hamcrest.Matchers.*;
 public class EmployeeControllerTest {
     @Autowired
     MockMvc client;
-
     Company companyFromDb;
     @BeforeEach
     public void beforePrepare() {
@@ -45,33 +36,12 @@ public class EmployeeControllerTest {
         Company companyFromDb = companyDao.saveAndFlush(company);
         this.companyFromDb = companyFromDb;
     }
-
-    private void saveFourEmployees() {
-        Employee firstEmployee = new Employee("", "YunChen", 18, "male", 18000, companyFromDb.getCompanyName());
-        firstEmployee.setCompanyId(companyFromDb.getId());
-        Employee secondEmployee = new Employee("", "Sarah", 18, "Female", 22000, companyFromDb.getCompanyName());
-        secondEmployee.setCompanyId(companyFromDb.getId());
-        Employee thirdEmployee = new Employee("", "Mike", 18, "Female", 22000, companyFromDb.getCompanyName());
-        thirdEmployee.setCompanyId(companyFromDb.getId());
-        Employee fourthEmployee = new Employee("", "Jack", 18, "Female", 22000, companyFromDb.getCompanyName());
-        fourthEmployee.setCompanyId(companyFromDb.getId());
-        employeeService.insertEmployee(firstEmployee);
-        employeeService.insertEmployee(secondEmployee);
-        employeeService.insertEmployee(fourthEmployee);
-        employeeService.insertEmployee(thirdEmployee);
-    }
-
     @Autowired
     CompanyDao companyDao;
-
     @Autowired
     EmployeeService employeeService;
     @Autowired
-    EmployeeRepository employeeRepository;
-
-    @Autowired
     EmployeeDao employeeDao;
-
     @Test
     void should_get_all_employees_when_perform_get_given_employees() throws Exception {
         //given

@@ -1,13 +1,10 @@
 package com.rest.springbootemployee.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.rest.springbootemployee.enities.Company;
 import com.rest.springbootemployee.enities.Employee;
-import com.rest.springbootemployee.mapper.CompaniesRepository;
 import com.rest.springbootemployee.mapper.CompanyDao;
 import com.rest.springbootemployee.mapper.EmployeeDao;
 import com.rest.springbootemployee.services.CompaniesService;
-import com.rest.springbootemployee.utils.Constant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,41 +15,28 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class CompanyControllerTest {
-
-
-
-    @Autowired
-    CompaniesRepository companiesRepository;
     @BeforeEach
     void prepareForTest() {
         employeeDao.deleteAll();
         companyDao.deleteAll();
     }
-
     @Autowired
     EmployeeDao employeeDao;
     @Autowired
     CompanyDao companyDao;
-
     @Autowired
     CompaniesService companiesService;
-
     @Autowired
     MockMvc client;
-
     @Test
     void should_return_all_companies_when_query_all_companies_given_query() throws Exception {
         //given
@@ -161,11 +145,6 @@ public class CompanyControllerTest {
         //then
     }
 
-    void saveBatchEmployees(Employee... employees) {
-        for (int i = 0; i < employees.length; i++) {
-            employeeDao.save(employees[i]);
-        }
-    }
 
     @Test
     void should_change_name_of_company_when_update_given_update_msg()throws Exception {

@@ -1,16 +1,12 @@
 package com.rest.springbootemployee.services;
 
-import com.rest.springbootemployee.enities.Company;
 import com.rest.springbootemployee.enities.Employee;
-import com.rest.springbootemployee.mapper.CompanyDao;
 import com.rest.springbootemployee.mapper.EmployeeDao;
-import com.rest.springbootemployee.mapper.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -28,44 +24,14 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 public class EmployeeServiceTest {
-
-
     @Mock
     EmployeeDao employeeDao;
     @InjectMocks
     EmployeeService employeeService;
-
-    Company companyFromDb;
     @BeforeEach
     public void beforePrepare() {
         employeeDao.deleteAll();
-//        companyDao.deleteAll();
-//        Company company = new Company("", "spring", null);
-//        Company companyFromDb = companyDao.saveAndFlush(company);
-//        this.companyFromDb = companyFromDb;
     }
-
-    private void saveFourEmployees() {
-        Employee firstEmployee = new Employee("", "YunChen", 18, "male", 18000, companyFromDb.getCompanyName());
-        firstEmployee.setCompanyId(companyFromDb.getId());
-        Employee secondEmployee = new Employee("", "Sarah", 18, "Female", 22000, companyFromDb.getCompanyName());
-        secondEmployee.setCompanyId(companyFromDb.getId());
-        Employee thirdEmployee = new Employee("", "Mike", 18, "Female", 22000, companyFromDb.getCompanyName());
-        thirdEmployee.setCompanyId(companyFromDb.getId());
-        Employee fourthEmployee = new Employee("", "Jack", 18, "Female", 22000, companyFromDb.getCompanyName());
-        fourthEmployee.setCompanyId(companyFromDb.getId());
-        employeeService.insertEmployee(firstEmployee);
-        employeeService.insertEmployee(secondEmployee);
-        employeeService.insertEmployee(fourthEmployee);
-        employeeService.insertEmployee(thirdEmployee);
-    }
-
-//    @Autowired
-//    CompanyDao companyDao;
-
-
-
-
     @Test
     void should_return_all_employees_when_find_all_given_given_employees() {
         List<Employee> prepareEmployees = new ArrayList<>();
@@ -154,8 +120,6 @@ public class EmployeeServiceTest {
         //then
         assertThat(insertEmployee).isEqualTo(firstEmployee);
     }
-
-
     @Test
     void should_count_down_the_employee_when_delete_employee_by_id_given_employee_id() {
         //given
@@ -166,6 +130,4 @@ public class EmployeeServiceTest {
         //when
         //then
     }
-
-
 }
