@@ -25,28 +25,12 @@ public class EmployeeController {
     //companyId:1552582897884463104
     @GetMapping(params = {"gender"})
     public List<EmployeeResponse> queryGender(@RequestParam("gender") String gender) throws IllegalAccessException, NoSuchFieldException, InstantiationException {
-        List<EmployeeResponse> returnList = new ArrayList<>();
-        List<Employee> employees = employeeService.queryEmployeeByGender(gender);
-        return MapperDtoUtil.<EmployeeResponse, Employee>toResponse(employees, EmployeeResponse.class);
-//        employees.forEach(employee -> {
-//            try {
-//                returnList.add(
-//                        MapperDtoUtil.<EmployeeResponse, Employee>toResponse(employee, EmployeeResponse.class)
-//                );
-//            } catch (IllegalAccessException e) {
-//                e.printStackTrace();
-//            } catch (InstantiationException e) {
-//                e.printStackTrace();
-//            } catch (NoSuchFieldException e) {
-//                e.printStackTrace();
-//            }
-//        });
-//        return returnList;
+        return MapperDtoUtil.<EmployeeResponse, Employee>toResponse(employeeService.queryEmployeeByGender(gender), EmployeeResponse.class);
     }
 
     @GetMapping("/{id}")
-    public EmployeeResponse queryEmployeeById(@PathVariable String id)   {
-        return EmployeeMapper.toResponse(employeeService.queryEmployeeById(id));
+    public EmployeeResponse queryEmployeeById(@PathVariable String id) throws IllegalAccessException, NoSuchFieldException, InstantiationException {
+        return MapperDtoUtil.<EmployeeResponse, Employee>toResponse(employeeService.queryEmployeeById(id), EmployeeResponse.class);
     }
 
     @GetMapping
