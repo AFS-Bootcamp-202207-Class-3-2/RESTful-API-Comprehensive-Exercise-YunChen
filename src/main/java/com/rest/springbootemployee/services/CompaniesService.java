@@ -1,10 +1,12 @@
 package com.rest.springbootemployee.services;
 
+import com.rest.springbootemployee.Dto.CompanyRequest;
 import com.rest.springbootemployee.enities.Company;
 import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.exception.CompanyNotFindException;
 import com.rest.springbootemployee.mapper.CompanyDao;
 import com.rest.springbootemployee.utils.CompanyMapper;
+import com.rest.springbootemployee.utils.MapperDtoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,9 +45,11 @@ public class CompaniesService {
         return companyInsert;
     }
 
-    public Company updateCompany(String id,Company company) {
+    public Company updateCompany(String id,Company company) throws NoSuchFieldException, IllegalAccessException {
         Company companyFromDb = companyDao.findById(id).orElseThrow(CompanyNotFindException::new);
-        return companyDao.save(CompanyMapper.toUpdate(company, companyFromDb));
+        return companyDao.save(
+                MapperDtoUtil.<Company, CompanyRequest>toUpdate(company, companyFromDb, CompanyRequest.class)
+        );
     }
 
     public Company deleteCompanyById(String id) {

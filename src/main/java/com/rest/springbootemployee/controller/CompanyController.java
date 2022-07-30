@@ -1,15 +1,13 @@
 package com.rest.springbootemployee.controller;
 
-import com.rest.springbootemployee.Dto.CompanyPageResponse;
-import com.rest.springbootemployee.Dto.CompanyRequest;
-import com.rest.springbootemployee.Dto.CompanyResponse;
-import com.rest.springbootemployee.Dto.EmployeeResponse;
+import com.rest.springbootemployee.Dto.*;
 import com.rest.springbootemployee.enities.Company;
 import com.rest.springbootemployee.enities.Employee;
 import com.rest.springbootemployee.services.CompaniesService;
 import com.rest.springbootemployee.utils.CompanyMapper;
 import com.rest.springbootemployee.utils.Constant;
 import com.rest.springbootemployee.utils.EmployeeMapper;
+import com.rest.springbootemployee.utils.MapperDtoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -26,38 +24,49 @@ public class CompanyController {
     private CompaniesService companiesService;
 
     @GetMapping
-    public List<CompanyResponse> queryAllCompanies() {
-        return CompanyMapper.toResponse(companiesService.queryAllCompanies());
+    public List<CompanyResponse> queryAllCompanies() throws InstantiationException, IllegalAccessException, NoSuchFieldException {
+        return MapperDtoUtil.<CompanyResponse, Company>toResponse(
+                companiesService.queryAllCompanies()
+                , CompanyResponse.class);
     }
 
     @GetMapping("/{id}")
-    public CompanyResponse queryCompanyById(@PathVariable String id) {
-        return CompanyMapper.toResponse(companiesService.queryCompanyById(id));
+    public CompanyResponse queryCompanyById(@PathVariable String id) throws IllegalAccessException, NoSuchFieldException, InstantiationException {
+        return MapperDtoUtil.<CompanyResponse, Company>toResponse(companiesService.queryCompanyById(id),
+                CompanyResponse.class);
     }
 
     @GetMapping("/{id}/employees")
-    public List<EmployeeResponse> queryEmployeesInCompanyById(@PathVariable String id) {
-        return EmployeeMapper.toResponse(companiesService.queryEmployeesInCompanyById(id));
+    public List<EmployeeResponse> queryEmployeesInCompanyById(@PathVariable String id) throws IllegalAccessException, NoSuchFieldException, InstantiationException {
+        return MapperDtoUtil.<EmployeeResponse, Employee>toResponse(companiesService.queryEmployeesInCompanyById(id)
+                , EmployeeResponse.class);
     }
 
     @GetMapping(params = {"page", "pageSize"})
-    public CompanyPageResponse queryCompanyPage(@RequestParam("page") int page,
-                                                @RequestParam("pageSize") int pageSize) {
-        return CompanyMapper.toResponse(companiesService.queryCompanyPage(page, pageSize));
+    public PageResponse<Company> queryCompanyPage(@RequestParam("page") int page,
+                                                  @RequestParam("pageSize") int pageSize) throws IllegalAccessException, NoSuchFieldException, InstantiationException {
+        return MapperDtoUtil.<Company>toResponse(companiesService.queryCompanyPage(page, pageSize)
+                , Company.class);
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public CompanyResponse insertCompany(@RequestBody CompanyRequest companyRequest) {
-        return CompanyMapper.toResponse(
-                companiesService.insertCompany(CompanyMapper.toRequest(companyRequest)));
+    public CompanyResponse insertCompany(@RequestBody CompanyRequest companyRequest) throws InstantiationException, IllegalAccessException, NoSuchFieldException {
+
+        return MapperDtoUtil.<CompanyResponse, Company>toResponse(
+                companiesService.insertCompany(
+                        MapperDtoUtil.<Company, CompanyRequest>toRequest(companyRequest, Company.class)
+                ), CompanyResponse.class
+        );
     }
 
     @PutMapping("/{id}")
     public CompanyResponse updateCompany(@PathVariable("id") String companyId,
-                                 @RequestBody CompanyRequest companyRequest) {
-        return CompanyMapper.toResponse(
-                companiesService.updateCompany(companyId, CompanyMapper.toRequest(companyRequest))
+                                         @RequestBody CompanyRequest companyRequest) throws IllegalAccessException, NoSuchFieldException, InstantiationException {
+
+        return MapperDtoUtil.<CompanyResponse, Company>toResponse(
+                companiesService.updateCompany(companyId, CompanyMapper.toRequest(companyRequest)),
+                CompanyResponse.class
         );
     }
 
