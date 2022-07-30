@@ -10,6 +10,7 @@ import com.rest.springbootemployee.services.CompaniesService;
 import com.rest.springbootemployee.utils.CompanyMapper;
 import com.rest.springbootemployee.utils.Constant;
 import com.rest.springbootemployee.utils.EmployeeMapper;
+import com.rest.springbootemployee.utils.MapperDtoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -26,8 +27,10 @@ public class CompanyController {
     private CompaniesService companiesService;
 
     @GetMapping
-    public List<CompanyResponse> queryAllCompanies() {
-        return CompanyMapper.toResponse(companiesService.queryAllCompanies());
+    public List<CompanyResponse> queryAllCompanies() throws InstantiationException, IllegalAccessException, NoSuchFieldException {
+        return MapperDtoUtil.<CompanyResponse, Company>toResponse(
+                companiesService.queryAllCompanies()
+                , CompanyResponse.class);
     }
 
     @GetMapping("/{id}")
